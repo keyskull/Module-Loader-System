@@ -15,5 +15,5 @@ typedef struct _Validated_License{
 }Validated_License;
 
 void * Apply_Memory(Terminal_data *terminal, size_t _Size);
-
+int Free_Memory(void * memory_handle);
 #endif

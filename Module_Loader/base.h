@@ -1,6 +1,5 @@
 #ifndef BUILD_H
 #define BUILD_H
-#include<stdlib.h>
 #define WINDOWS_SYSTEM
 #define INIT_CACHE_SIZE 100
 #define CMD_CACHE 30
