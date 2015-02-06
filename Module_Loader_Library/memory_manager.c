@@ -18,8 +18,8 @@ int Memory_manager(Event *event){
 	if (event->func == Init_Memory_manger){
 		if (Memory_list != NULL)return EXIT_FAILURE;
 		else {
-			Memory_list = malloc(event->_Size);
-			return EXIT_SUCCESS;
+			if (Memory_list = malloc(event->_Size) == NULL)return EXIT_FAILURE;
+			else return EXIT_SUCCESS;
 		}
 	}
 	else if (event->func == Apply_Memory){
@@ -32,7 +32,8 @@ int Memory_manager(Event *event){
 	}
 }
 int Init_Memory_manger(const Terminal_data *terminal, size_t _Size){
-	
+	Event event = { Init_Memory_manger,_Size,terminal,NULL };
+	Memory_manager(&event);
 }
 void * Apply_Memory(const Terminal_data * terminal, size_t _Size){
 	Event event = { Apply_Memory, _Size, terminal,NULL};
