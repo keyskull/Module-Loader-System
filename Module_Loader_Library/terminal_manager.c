@@ -14,7 +14,7 @@ typedef struct _Event{
 }Event;
 
 int Terminal_manager(Event *event){
-	static void *Event_cache = NULL;
+	static const void *Event_cache = NULL;
 	static Terminal_stack *terminal_list = NULL;
 	clock_t _clock = clock() + 30000;
 	while (Event_cache != NULL)	if (clock()>_clock)return EXIT_TIMEOUT;
@@ -34,7 +34,7 @@ int Terminal_manager(Event *event){
 				terminal_list = new_struct;
 			}
 			const time_t now = time(NULL);
-			const Terminal_data _terminal = { tid, now, event->user_info };
+			const Terminal_data _terminal = { tid, now,NULL,event->user_info };////////////////////////////
 			Terminal_data *terminal = malloc(sizeof(Terminal_data));
 			memcpy(terminal, &_terminal, sizeof(Terminal_data));
 			Terminal_stack new_struct_s = { (Terminal_data * const)terminal, terminal_list->next };
@@ -60,7 +60,7 @@ int Terminal_manager(Event *event){
 	return EXIT_SUCCESS;
 }
 
-Terminal_data * Apply_terminal(const User_Info * user){
+const Terminal_data * Apply_terminal(const User_Info * user){
 	Event event = { Apply_terminal, user, NULL };
 	Terminal_manager(&event);
 	return event.terminal;

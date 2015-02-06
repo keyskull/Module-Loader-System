@@ -55,7 +55,8 @@ int User_manager(Event *event){
 
 User_struct * Add_User(char *name){
 	Event event = { Add_User, name, NULL };
-	return User_manager(&event);
+	if (User_manager(&event) == EXIT_SUCCESS)return event.user_struct;
+	else return _EXIT_FAILURE;
 }
 
 int Remove_User(User_struct *user){ 

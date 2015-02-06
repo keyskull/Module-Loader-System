@@ -27,7 +27,7 @@ typedef struct {
 extern "C"
 {
 #endif                          /* __cplusplus */
-Terminal_data  *Apply_terminal(const User_Info * user);
+const Terminal_data  *Apply_terminal(const User_Info * user);
 int Kill_terminal(const Terminal_data * terminal);
 #if defined(__cplusplus)
 }                               /* End of extern "C" */

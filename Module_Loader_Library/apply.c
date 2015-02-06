@@ -10,8 +10,8 @@
 int Apply_repl(Terminal_data *terminal){
 	Repl_data_struct *repl_data = malloc(sizeof(Repl_data_struct));
 	repl_data->terminal = terminal;
-	repl(repl_data);
-	free(repl_data);
-	return EXIT_SUCCESS;
+	int i = repl(repl_data);
+	if(i == INIT_REPL_ERROR ||i == EXIT_FAILURE)return EXIT_FAILURE;
+	else return EXIT_SUCCESS;
 }
 
