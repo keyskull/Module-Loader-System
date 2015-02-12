@@ -11,7 +11,7 @@
 extern "C"
 {
 #endif                          /* __cplusplus */
-int Apply_repl(Terminal_data *terminal);
+int Apply_repl(const Terminal_data *terminal);
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

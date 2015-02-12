@@ -10,7 +10,7 @@ char * base_su(const Args_struct *const args, Repl_data_struct * const repl_data
 		const User_Info _use = { 0, (unsigned char *)args->args[0] };
 		User_Info *const use = malloc(sizeof(User_Info));
 		memmove(use, &_use, sizeof(User_Info));
-		Terminal_data *ter = Apply_terminal(use);
+		const Terminal_data *ter = Apply_terminal(use);
 		Apply_repl(ter);
 	}
 	else return "you should be enter login name.";
@@ -23,24 +23,23 @@ char *base_module(const Args_struct *const args, Repl_data_struct * const repl_d
 	return "load success";
 }
 
-char * base_time(const Args_struct *const args, Repl_data_struct * const repl_data){
+char *base_time(const Args_struct *const args, Repl_data_struct * const repl_data){
 	return Get_date("%Y/%m/%d %H:%M:%S");
 }
 
 char *base_help(const Args_struct *const args, Repl_data_struct * const repl_data){
-	int i = 0;
 	char *c = calloc(INIT_CACHE_SIZE, sizeof(char));
 	strcpy(c, "this is Mylib help command\n");
-	while(repl_data->public_cmd_list[i]!=NULL){
-		strcat(c,(char *)repl_data->public_cmd_list[i]);
-		if (repl_data->public_cmd_list[i + 1] != NULL)strcat(c, "\n");
-		i++;
+	for (int i = 0; i < repl_data->cmd_list_stack.length; ++i){
+		strcat(c, repl_data->cmd_list_stack.cmd_list[i].cmd_name);
+		if (i != repl_data->cmd_list_stack.length-1)strcat(c, "\n");
+
 	}
 
 	return c;
 }
 
-char * base_exit(const Args_struct *const args, Repl_data_struct * const repl_data)
+char *base_exit(const Args_struct *const args, Repl_data_struct * const repl_data)
 {
 	repl_data->state = 0;
 	Kill_terminal(repl_data->terminal);

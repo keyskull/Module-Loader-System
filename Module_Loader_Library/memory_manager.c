@@ -5,7 +5,7 @@
 
 
 
-typedef struct _Event{
+typedef struct _Event{ 
 	void * const func;
 	const size_t _Size;
 	const Terminal_data * const terminal;
@@ -42,6 +42,6 @@ void * Apply_Memory(const Terminal_data * terminal, size_t _Size){
 }
 
 int Free_Memory(const Terminal_data * terminal, void * memory_handle){
-	Event event = { Free_Memory, NULL, terminal, memory_handle };
+	Event event = { Free_Memory, 0, terminal, memory_handle };
 	return Memory_manager(&event);
 }
