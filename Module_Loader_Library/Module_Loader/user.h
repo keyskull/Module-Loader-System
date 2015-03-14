@@ -22,4 +22,5 @@ typedef struct {
 
 User_struct * Add_User(char *name);
 int Remove_User(User_struct *user);
+
 #endif

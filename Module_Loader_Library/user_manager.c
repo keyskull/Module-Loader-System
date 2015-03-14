@@ -1,6 +1,6 @@
 
-#include "base.h"
-#include "authentication.h"
+#include "Module_Loader\base.h"
+#include "Module_Loader\authentication.h"
 #include <string.h>
 #include <time.h>
 typedef struct _User_stack{
@@ -16,9 +16,9 @@ typedef struct _Event{
 
 int Find_User(char *name);
 
-int User_manager(Event *event){
-	static void *Event_cache = NULL;
+static int User_manager(Event *event){
 	static User_stack *user_stack = NULL;
+	static void *Event_cache = NULL;
 	clock_t _clock = clock() + 30000;
 	while (Event_cache != NULL)	if (clock()>_clock)return EXIT_TIMEOUT;
 	Event_cache = event->func;
@@ -49,7 +49,11 @@ int User_manager(Event *event){
 	else if (event->func == Find_User){
 
 	}
-	else return EXIT_FAILURE;
+	else{
+		Event_cache = NULL;
+		return EXIT_FAILURE;
+	}
+	Event_cache = NULL;
 	return EXIT_SUCCESS;
 }
 

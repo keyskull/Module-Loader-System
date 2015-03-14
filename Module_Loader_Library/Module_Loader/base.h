@@ -1,5 +1,5 @@
-#ifndef BUILD_H
-#define BUILD_H
+#ifndef BASE_H
+#define BASE_H
 #define WINDOWS_SYSTEM
 #define INIT_CACHE_SIZE 100
 #define CMD_CACHE 30
@@ -11,20 +11,28 @@
 #define _EXIT_MEMORY_ERROR ((void *)EXIT_MEMORY_ERROR)
 #include <stdlib.h>
 #include <stdio.h>
-#include "terminal.h"
 
 
 #if defined(__cplusplus)
 extern "C"
 {
 #endif                          /* __cplusplus */
+
+	typedef const struct _Receipt{
+		const time_t create_time;
+		const char *const info;
+		const void *const used_func;
+		const void *const signal;
+	}Receipt;
 	typedef	const unsigned char Key_data[4];
 
+	/*system function*/
+
+	/*misc function*/
 	_declspec(dllexport) int Default_run(void);
-	char **const Tokenizer(char *args, const char Keyword);
+	char **const Tokenizer(char *args, const char Keyword);//分词器
 	char *Show_Time_CharFormat(time_t time, const char * format);
 	char *Get_date(const char * format);
-	const char *const Get_repl_version(void);
 
 #if defined(__cplusplus)
 }                               /* End of extern "C" */

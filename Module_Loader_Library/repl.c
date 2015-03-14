@@ -1,14 +1,14 @@
-#include "base.h"
+#include "Module_Loader\base.h"
 #include<string.h>
 #include <time.h>
-#include "repl.h"
+#include "Module_Loader\repl.h"
 
 
 
 char * Not_Found_function(char *args, Repl_data_struct * const repl_data){ return NOT_FOUND_FUNCTION; }
 const char *const Get_repl_version(void){return REPL_VERSION;}
 
-int Init_repl(Repl_data_struct *repl_data){
+static int Init_repl(Repl_data_struct *repl_data){
 	if (!repl_data)return EXIT_FAILURE;
 	else if(!repl_data->terminal)return EXIT_FAILURE;
 	else if (!repl_data->terminal->user_data)return EXIT_FAILURE;
@@ -16,7 +16,7 @@ int Init_repl(Repl_data_struct *repl_data){
 	return EXIT_SUCCESS;
 }
 
-int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){
+int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){//need modify
 	if (cmd_list_stack->cmd_list != NULL){
 		const CMD_struct cmd = { cmd_name, func };
 		memmove(&(cmd_list_stack->cmd_list[cmd_list_stack->length]), &cmd, sizeof(CMD_struct));
@@ -26,7 +26,7 @@ int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){
 	return EXIT_SUCCESS;
 }
 
-Function Find_command(CMD_list_stack cmd_list, const unsigned char * const command){
+static Function Find_command(CMD_list_stack cmd_list, const unsigned char * const command){
 
 	for (int i = 0; i<(int)cmd_list.length; i++){
 		if (!strcoll((char *)cmd_list.cmd_list[i].cmd_name, command)){
@@ -36,7 +36,7 @@ Function Find_command(CMD_list_stack cmd_list, const unsigned char * const comma
 	return (Function)Not_Found_function;
 }
 
-int Run_command(Repl_data_struct *repl_data,const unsigned char *const command,const Args_struct *const args){
+static int Run_command(Repl_data_struct *repl_data,const unsigned char *const command,const Args_struct *const args){
 	if (command){
 		Function cmd = Find_command(repl_data->cmd_list_stack, command);
 		if (cmd == (Function)Not_Found_function){
@@ -52,12 +52,12 @@ int Run_command(Repl_data_struct *repl_data,const unsigned char *const command,c
 	return EXIT_SUCCESS;
 }
 
-int Free_repl(Repl_data_struct *repl_data){
+static int Free_repl(Repl_data_struct *repl_data){
 	//free(repl_data->cmd_list_stack.cmd_list);
 	return EXIT_SUCCESS;
 }
 
-int repl(Repl_data_struct *repl_data){
+static int repl(Repl_data_struct *repl_data){
 
 	/***Init***/
 	if (Init_repl(repl_data) == EXIT_FAILURE)return INIT_REPL_ERROR;
@@ -81,7 +81,7 @@ int repl(Repl_data_struct *repl_data){
 
 int Apply_repl(const Terminal_data *terminal){
 	
-	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//need update
+	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//need modify
 	CMD_list_stack cmd_list_stack = { cmd_struct, 0 };
 	Init_base_command(&cmd_list_stack);
 	Repl_data_struct repl_data = { 0, terminal, cmd_list_stack };
@@ -91,4 +91,3 @@ int Apply_repl(const Terminal_data *terminal){
 	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)return EXIT_FAILURE;
 	else return EXIT_SUCCESS;
 }
-

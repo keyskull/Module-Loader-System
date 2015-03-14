@@ -1,15 +1,15 @@
-
-
-#include "base.h"
+#include "Module_Loader\base.h"
 #include <time.h>
 #include <string.h>
 
 
-char * _Tokenizer(char *args, const char Keyword){
+static char * _Tokenizer(char *args, const char Keyword){
 	int i = 0;
 	while (args[i] != Keyword && args[i] != '\0')i++;
 	return &args[i];
 }
+
+//·Ö´ÊÆ÷
 char **const Tokenizer(char *args, const char Keyword){
 
 

@@ -1,6 +1,6 @@
-#include "base.h"
+#include "Module_Loader\base.h"
+#include "Module_Loader\terminal.h"
 #include<string.h>
-#include "terminal.h"
 
 typedef struct _terminal_stack{
 	Terminal_data * const terminal;
@@ -13,14 +13,15 @@ typedef struct _Event{
 	const Terminal_data * terminal;
 }Event;
 
-int Terminal_manager(Event *event){
-	static const void *Event_cache = NULL;
+static int Terminal_manager(Event *event){//需要修改成同时多个管理器
 	static Terminal_stack *terminal_list = NULL;
+	static const void *Event_cache = NULL;
 	clock_t _clock = clock() + 30000;
 	while (Event_cache != NULL)	if (clock()>_clock)return EXIT_TIMEOUT;
 	Event_cache = event->func;
 
 	if(event->func == Apply_terminal){
+
 		if(event->user_info != NULL){
 			unsigned int tid = 0;
 			Terminal_stack *t = terminal_list, *new_struct = malloc(sizeof(Terminal_stack));
@@ -34,7 +35,7 @@ int Terminal_manager(Event *event){
 				terminal_list = new_struct;
 			}
 			const time_t now = time(NULL);
-			const Terminal_data _terminal = { tid, now,NULL,event->user_info };////////////////////////////
+			const Terminal_data _terminal = { tid, now,NULL,event->user_info };//
 			Terminal_data *terminal = malloc(sizeof(Terminal_data));
 			memcpy(terminal, &_terminal, sizeof(Terminal_data));
 			Terminal_stack new_struct_s = { (Terminal_data * const)terminal, terminal_list->next };
@@ -55,8 +56,11 @@ int Terminal_manager(Event *event){
 			free(t);
 		}
 	}
-		else return EXIT_FAILURE;
-	Event_cache=NULL;
+	else{
+		Event_cache = NULL;
+		return EXIT_FAILURE;
+	}
+	Event_cache = NULL;
 	return EXIT_SUCCESS;
 }
 

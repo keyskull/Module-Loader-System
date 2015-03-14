@@ -32,7 +32,7 @@ typedef struct _Command_struct{
 	Args_struct * const args;
 }Command_struct;
 typedef struct _Repl_data_struct{
-	unsigned short int state;
+	_Bool state;
 	const Terminal_data *const terminal;
 	CMD_list_stack cmd_list_stack;
 }Repl_data_struct;
@@ -43,7 +43,7 @@ extern "C"
 #endif                          /* __cplusplus */
 
 char * Not_Found_function(char *args, Repl_data_struct * const repl_data);//return NOT_FOUND_FUNCTION
-
+const char *const Get_repl_version(void);
 int Init_base_command(CMD_list_stack *cmd_list);
 Command_struct *Control(void);
 int Add_command(CMD_list_stack *cmd_list,char *cmd_name,Function func);
