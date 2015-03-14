@@ -5,7 +5,7 @@
 
 
 
-typedef struct {
+typedef const struct _User_Info {
 	const unsigned int uid;
 	char * const user_name;
 }User_Info;

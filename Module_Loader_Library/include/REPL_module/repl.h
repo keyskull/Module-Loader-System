@@ -1,7 +1,7 @@
 
 #ifndef __REPL_H__
 #define __REPL_H__
-#include "terminal.h"
+#include "Terminal_module\terminal.h"
 #define REPL_VERSION "1.0"
 #define NOT_FOUND_FUNCTION ((char *)0)
 #define INIT_REPL_ERROR 2
@@ -33,7 +33,7 @@ typedef struct _Command_struct{
 }Command_struct;
 typedef struct _Repl_data_struct{
 	_Bool state;
-	const Terminal_data *const terminal;
+	Terminal_data *const terminal;
 	CMD_list_stack cmd_list_stack;
 }Repl_data_struct;
 /**end repl struct**/

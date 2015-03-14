@@ -6,7 +6,7 @@
 
 typedef const struct _License{
 	const time_t create_time;
-	const User_Info *const owner;
+	User_Info *const owner;
 }License;
 
 typedef const struct _Validated_License{

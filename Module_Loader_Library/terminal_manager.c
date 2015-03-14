@@ -1,5 +1,6 @@
 #include "Module_Loader\base.h"
-#include "Module_Loader\terminal.h"
+#include "Terminal_module\terminal.h"
+#include "User_module\user.h"
 #include<string.h>
 
 typedef struct _terminal_stack{
@@ -9,8 +10,8 @@ typedef struct _terminal_stack{
 
 typedef struct _Event{
 	const void * const func;
-	const User_Info * const user_info;
-	const Terminal_data * terminal;
+	User_Info * const user_info;
+	Terminal_data * terminal;
 }Event;
 
 static int Terminal_manager(Event *event){//需要修改成同时多个管理器
@@ -35,7 +36,7 @@ static int Terminal_manager(Event *event){//需要修改成同时多个管理器
 				terminal_list = new_struct;
 			}
 			const time_t now = time(NULL);
-			const Terminal_data _terminal = { tid, now,NULL,event->user_info };//
+			Terminal_data _terminal = { tid, now,NULL,event->user_info };//
 			Terminal_data *terminal = malloc(sizeof(Terminal_data));
 			memcpy(terminal, &_terminal, sizeof(Terminal_data));
 			Terminal_stack new_struct_s = { (Terminal_data * const)terminal, terminal_list->next };
@@ -64,13 +65,13 @@ static int Terminal_manager(Event *event){//需要修改成同时多个管理器
 	return EXIT_SUCCESS;
 }
 
-const Terminal_data * Apply_terminal(const User_Info * user){
+Terminal_data * Apply_terminal(User_Info * user){
 	Event event = { Apply_terminal, user, NULL };
 	Terminal_manager(&event);
 	return event.terminal;
 }
 
-int Kill_terminal(const Terminal_data * terminal){
+int Kill_terminal(Terminal_data * terminal){
 	Event event = { Kill_terminal, NULL, terminal };
 	return Terminal_manager(&event);
 }

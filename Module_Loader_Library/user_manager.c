@@ -1,6 +1,6 @@
 
 #include "Module_Loader\base.h"
-#include "Module_Loader\authentication.h"
+#include "User_module\authentication.h"
 #include <string.h>
 #include <time.h>
 typedef struct _User_stack{
@@ -34,7 +34,7 @@ static int User_manager(Event *event){
 			_user_stack->next = user_stack;
 		}else _user_stack->next = _user_stack;
 		User_stack __user_stack = { malloc(sizeof(User_struct)), _user_stack->next };
-		const User_Info _user = { uid, event->user_name };
+		User_Info _user = { uid, event->user_name };
 		User_Info *const user = malloc(sizeof(User_Info));
 		memcpy(user, &_user, sizeof(User_Info));
 		User_struct user_struct = { (const long)_clock, malloc(sizeof(User_log)), user };

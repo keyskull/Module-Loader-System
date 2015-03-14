@@ -1,16 +1,17 @@
 #include "Module_Loader\base.h"
-#include<string.h>
-#include "Module_Loader\repl.h"
+#include "REPL_module\repl.h"
 #include "Module_Loader\apply.h"
+#include<string.h>
+
 
 
 
 char * base_su(const Args_struct *const args, Repl_data_struct * const repl_data){
 	if (args->length>0){
-		const User_Info _use = { 0, (unsigned char *)args->args[0] };
+		User_Info _use = { 0, (unsigned char *)args->args[0] };
 		User_Info *const use = malloc(sizeof(User_Info));
 		memmove(use, &_use, sizeof(User_Info));
-		const Terminal_data *ter = Apply_terminal(use);
+		Terminal_data *ter = Apply_terminal(use);
 		Apply_repl(ter);
 	}
 	else return "you should be enter login name.";

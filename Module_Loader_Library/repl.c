@@ -1,7 +1,8 @@
 #include "Module_Loader\base.h"
+#include "REPL_module\repl.h"
+#include "Terminal_module\terminal.h"
 #include<string.h>
 #include <time.h>
-#include "Module_Loader\repl.h"
 
 
 
@@ -79,7 +80,7 @@ static int repl(Repl_data_struct *repl_data){
 }
 
 
-int Apply_repl(const Terminal_data *terminal){
+int Apply_repl(Terminal_data *terminal){
 	
 	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//need modify
 	CMD_list_stack cmd_list_stack = { cmd_struct, 0 };

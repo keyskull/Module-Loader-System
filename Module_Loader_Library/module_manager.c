@@ -7,7 +7,7 @@
 
 typedef struct _Event{
 	const void * const func;
-	const module_struct * const module;
+	module_struct * const module;
 }Event;
 
 /*需要修改成同时多个管理器*/
@@ -35,19 +35,19 @@ static Receipt *const Module_manager(Event *event){
 	return EXIT_SUCCESS;
 }
 
-static Receipt *const _Add_module(const module_struct *const module, Receipt *const(*const func)(Event *event))
+static Receipt *const _Add_module(module_struct *const module, Receipt *const(*const func)(Event *event))
 {
 	Event event = { Add_module, module };
 	func(&event);
 	return NULL;
 }
 
-static Receipt *const _Remove_module(const module_struct *const module, Receipt *const(*const func)(Event *event))
+static Receipt *const _Remove_module(module_struct *const module, Receipt *const(*const func)(Event *event))
 {
 	Event event = { Remove_module, NULL };
 	return func(&event);
 }
 
 
-Receipt *const Add_module(const module_struct *const module){ return _Add_module(module, Module_manager); }
-Receipt *const Remove_module(const module_struct *const module){ return _Remove_module(module, Module_manager); }
+Receipt *const Add_module(module_struct *const module){ return _Add_module(module, Module_manager); }
+Receipt *const Remove_module(module_struct *const module){ return _Remove_module(module, Module_manager); }

@@ -1,12 +1,12 @@
 #include "Module_Loader\base.h"
-#include "Module_Loader\terminal.h"
+#include "Terminal_module\terminal.h"
 #include "Module_Loader\apply.h"
 #include <windows.h> 
 
 
 _declspec(dllexport) int Default_run(void){
 
-	const User_Info use = { 0, "key_q" };
+	User_Info use = { 0, "key_q" };
 	Terminal_data *ter = Apply_terminal(&use);
 	Apply_repl(ter);
 #pragma omp parallel

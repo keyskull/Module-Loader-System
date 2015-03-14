@@ -1,6 +1,6 @@
 #include"Module_Loader\base.h"
 #include"Module_Loader\stream.h"
-#include"Module_Loader\terminal.h"
+#include"Terminal_module\terminal.h"
 
 STREAM* Register_channel(Terminal_data *Terminal){
 

@@ -10,25 +10,25 @@
 #ifndef __TERMINAL_H__
 #define __TERMINAL_H__
 #include <time.h>  
-#include "user.h"
+#include "User_module\user.h"
 
 typedef struct _running_func_stack{
 	const void *const  func;
 	struct _func_stack *next;
 }running_func_stack;
 
-typedef struct {
+typedef const struct _Terminal_data {
 	const unsigned short int tid;
 	const time_t login_date;
-	const running_func_stack * running_func;
-	const User_Info * const user_data;
+	running_func_stack *const running_func;
+	User_Info * const user_data;
 }Terminal_data;
 #if defined(__cplusplus)
 extern "C"
 {
 #endif                          /* __cplusplus */
-const Terminal_data  *Apply_terminal(const User_Info * user);
-int Kill_terminal(const Terminal_data * terminal);
+Terminal_data  *Apply_terminal(User_Info * user);
+int Kill_terminal(Terminal_data * terminal);
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

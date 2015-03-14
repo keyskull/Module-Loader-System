@@ -7,7 +7,6 @@
 
 #include "Module_Loader\base.h"
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 typedef struct _Parameter_stack{
 	const unsigned char *Pname;
