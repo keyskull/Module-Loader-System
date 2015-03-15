@@ -53,13 +53,12 @@ static int Run_command(Repl_data_struct *repl_data,const unsigned char *const co
 	return EXIT_SUCCESS;
 }
 
-static int Free_repl(Repl_data_struct *repl_data){
-	//free(repl_data->cmd_list_stack.cmd_list);
-	return EXIT_SUCCESS;
-}
 
 static int repl(Repl_data_struct *repl_data){
-
+	/*需要修改
+	目前不能强制授权
+	流控制未修改：openmp
+	*/
 	/***Init***/
 	if (Init_repl(repl_data) == EXIT_FAILURE)return INIT_REPL_ERROR;
 	/***end Init***/
@@ -74,15 +73,15 @@ static int repl(Repl_data_struct *repl_data){
 
 	/** over **/
 
-	Free_repl(repl_data);
+	
 	/** over done**/
 	return EXIT_SUCCESS;
 }
 
 
-int Apply_repl(Terminal_data *terminal){
+Receipt *const Apply_repl(Terminal_data *terminal){
 	
-	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//need modify
+	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//需要修改
 	CMD_list_stack cmd_list_stack = { cmd_struct, 0 };
 	Init_base_command(&cmd_list_stack);
 	Repl_data_struct repl_data = { 0, terminal, cmd_list_stack };

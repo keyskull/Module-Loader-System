@@ -17,8 +17,8 @@ typedef struct _Event{
 int Init_Memory_manger(Terminal_data *terminal, size_t _Size);
 
 static int Memory_manager(Event *event){
-	static void **Memory_list=NULL;
-	static void *Event_cache = NULL;
+	volatile void **Memory_list = NULL;
+	volatile void *Event_cache = NULL;
 	clock_t _clock = clock() + 30000;
 	while (Event_cache != NULL)	if (clock()>_clock)return EXIT_TIMEOUT;
 	Event_cache = event->func;

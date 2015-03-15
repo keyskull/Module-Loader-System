@@ -18,15 +18,23 @@ extern "C"
 {
 #endif                          /* __cplusplus */
 
+
+
+	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
+	typedef const struct _Signal{
+		const void *const pointer;
+		const enum SecurityLevel security_level;
+	}Signal;
 	typedef const struct _Receipt{
 		const time_t create_time;
-		const char *const info;
 		const void *const used_func;
-		const void *const signal;
+		Signal *const signal;
+		const char *const info;
 	}Receipt;
 	typedef	const unsigned char Key_data[4];
 
 	/*system function*/
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, const char *const additional_info);
 
 	/*misc function*/
 	_declspec(dllexport) int Default_run(void);
