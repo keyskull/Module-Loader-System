@@ -12,10 +12,10 @@ static _Bool Receipt_Log=1;
 static Receipt_stack *Receipt_Pool = NULL;
 
 
-Receipt *const Create_Receipt_extends(const void *const used_func, const enum SecurityLevel security_level,void *const father ,const char *const additional_info){
+Receipt *const Create_Receipt_extends(const void *const used_func, const enum SecurityLevel security_level, Ownership_stack *const Module_info, const char *const additional_info){
 	const time_t now = time(NULL);
 	Receipt *const receipt = malloc(sizeof(Receipt));
-	Receipt receipt_s = { now, used_func, additional_info, { security_level, father } };
+	Receipt receipt_s = { now, used_func, additional_info, { security_level, Module_info } };
 	memmove(receipt,&receipt_s,sizeof(receipt_s));
 	Receipt_stack * stack_s = malloc(sizeof(Receipt_stack));
 	if (Receipt_Pool == NULL){
@@ -33,9 +33,7 @@ Receipt *const Create_Receipt_extends(const void *const used_func, const enum Se
 	if (Receipt_Log);
 	return receipt;
 }
-Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, const char *const additional_info){
-	return Create_Receipt_extends(used_func, security_level, NULL, additional_info);
-}
+
 void Check_Receipt(){
 
 }

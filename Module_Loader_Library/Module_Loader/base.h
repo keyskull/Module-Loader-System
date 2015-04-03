@@ -18,18 +18,30 @@ extern "C"
 {
 #endif                          /* __cplusplus */
 
+
+	typedef const struct _Module_Info_stack{
+		int length;
+		struct _Module_Info *const Compatible;
+	}Compatible_stack;
 	typedef const struct _Module_Info{
-		char *const name;
-		int version;
+		char *const Author;
+		char *const Module_Name;
+		int Version;
+		Compatible_stack * const Compatible;
+		struct _Module_Info *const Necessary_Module;
 	}Module_Info;
 
-	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
-	typedef struct _Ownership_stack{
-		Module_Info * module
+	typedef const struct _Ownership_stack{
+		Module_Info *const module;
+		void *const handle;
 	}Ownership_stack;
+
+
+	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
+	
 	typedef const struct _Signal{
 		const enum SecurityLevel security_level;
-		const void *const pointer;
+		Ownership_stack *const Module_handle;
 	}Signal;
 	typedef const struct _Receipt{
 		const time_t create_time;
@@ -39,7 +51,8 @@ extern "C"
 	}Receipt;
 
 	/*system function*/
-	Receipt *const Create_Receipt_extends(const void *const used_func, const enum SecurityLevel security_level, void *const father, const char *const additional_info);
+	
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Ownership_stack *const Module_info, const char *const additional_info);
 	
 
 	/*misc function*/
