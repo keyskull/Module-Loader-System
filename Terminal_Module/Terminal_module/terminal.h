@@ -1,4 +1,4 @@
-/*
+﻿/*
  * terminal.h
  *
  *  Created on: 2014年11月19日
@@ -10,7 +10,7 @@
 #ifndef __TERMINAL_H__
 #define __TERMINAL_H__
 #include <time.h>  
-#include "User_module\user.h"
+#include "User_module/user.h"
 
 typedef struct _running_func_stack{
 	const void *const  func;
@@ -20,9 +20,15 @@ typedef struct _running_func_stack{
 typedef const struct _Terminal_data {
 	const unsigned short int tid;
 	const time_t login_date;
-	running_func_stack *const running_func;
+	running_func_stack *const running_program;
 	User_Info * const user_data;
 }Terminal_data;
+
+typedef struct _Terminal_Receipt{
+	Receipt *const receipt;
+	Terminal_data *const terminal;
+}Terminal_Receipt;
+
 #if defined(__cplusplus)
 extern "C"
 {

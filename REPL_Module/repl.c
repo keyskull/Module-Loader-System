@@ -1,6 +1,6 @@
-#include "Module_Loader\base.h"
-#include "REPL_module\repl.h"
-#include "Terminal_module\terminal.h"
+#include "Module_Loader/base.h"
+#include "REPL_module/repl.h"
+#include "Terminal_module/terminal.h"
 #include<string.h>
 #include <time.h>
 
@@ -45,9 +45,13 @@ static int Run_command(Repl_data_struct *repl_data,const unsigned char *const co
 			return EXIT_FAILURE;
 		}
 		else {
+			
 			char *c = cmd(args, repl_data);
 			if(c)printf("%s\n", c);
-			if ((void *)c > (void *)"const_mark")free(c);
+			int i = strlen(c) + 1;
+			char *cache = malloc(i);
+			memmove(cache, c, i);
+			free(cache);
 		}
 	}
 	return EXIT_SUCCESS;
@@ -55,10 +59,6 @@ static int Run_command(Repl_data_struct *repl_data,const unsigned char *const co
 
 
 static int repl(Repl_data_struct *repl_data){
-	/*需要修改
-	目前不能强制授权
-	流控制未修改：openmp
-	*/
 	/***Init***/
 	if (Init_repl(repl_data) == EXIT_FAILURE)return INIT_REPL_ERROR;
 	/***end Init***/
@@ -79,15 +79,14 @@ static int repl(Repl_data_struct *repl_data){
 }
 
 
-Receipt *const Apply_repl(Terminal_data *terminal){
-	
-	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//需要修改
+Terminal_Receipt *const Apply_shell(Terminal_data *terminal){
+	CMD_struct * cmd_struct=malloc(INIT_CACHE_SIZE/2*sizeof(CMD_struct));//需要修改INIT_CACHE_SIZE
 	CMD_list_stack cmd_list_stack = { cmd_struct, 0 };
 	Init_base_command(&cmd_list_stack);
 	Repl_data_struct repl_data = { 0, terminal, cmd_list_stack };
 	int i = repl(&repl_data);
 	free(cmd_struct);
-	//for (int i = 0; i < cmd_list_stack.length;i++)free(cmd_list_stack.cmd_list[i]);
-	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)return EXIT_FAILURE;
-	else return EXIT_SUCCESS;
+	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)
+		return Create_Receipt(Apply_shell, ERROR, "run fall");
+	else return Create_Receipt(Apply_shell, SUCCESS, "run succes");
 }

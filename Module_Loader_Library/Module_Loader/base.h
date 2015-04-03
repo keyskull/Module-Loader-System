@@ -1,4 +1,4 @@
-#ifndef BASE_H
+﻿#ifndef BASE_H
 #define BASE_H
 #define WINDOWS_SYSTEM
 #define INIT_CACHE_SIZE 100
@@ -18,26 +18,32 @@ extern "C"
 {
 #endif                          /* __cplusplus */
 
-
+	typedef const struct _Module_Info{
+		char *const name;
+		int version;
+	}Module_Info;
 
 	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
+	typedef struct _Ownership_stack{
+		Module_Info * module
+	}Ownership_stack;
 	typedef const struct _Signal{
-		const void *const pointer;
 		const enum SecurityLevel security_level;
+		const void *const pointer;
 	}Signal;
 	typedef const struct _Receipt{
 		const time_t create_time;
 		const void *const used_func;
-		Signal *const signal;
 		const char *const info;
+		Signal signal;
 	}Receipt;
-	typedef	const unsigned char Key_data[4];
 
 	/*system function*/
-	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, const char *const additional_info);
+	Receipt *const Create_Receipt_extends(const void *const used_func, const enum SecurityLevel security_level, void *const father, const char *const additional_info);
+	
 
 	/*misc function*/
-	_declspec(dllexport) int Default_run(void);
+
 	char **const Tokenizer(char *args, const char Keyword);//分词器
 	char *Show_Time_CharFormat(time_t time, const char * format);
 	char *Get_date(const char * format);

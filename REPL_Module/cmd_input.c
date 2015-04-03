@@ -6,8 +6,8 @@
  */
 
 
-#include "Module_Loader\base.h"
-#include "REPL_module\repl.h"
+#include "Module_Loader/base.h"
+#include "REPL_module/repl.h"
 #include <string.h>
 
 

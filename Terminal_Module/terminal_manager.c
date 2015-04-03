@@ -1,6 +1,6 @@
-#include "Module_Loader\base.h"
-#include "Terminal_module\terminal.h"
-#include "User_module\user.h"
+#include "Module_Loader/base.h"
+#include "Terminal_module/terminal.h"
+#include "User_module/user.h"
 #include<string.h>
 
 typedef struct _terminal_stack{

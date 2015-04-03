@@ -1,7 +1,7 @@
 
 #ifndef __REPL_H__
 #define __REPL_H__
-#include "Terminal_module\terminal.h"
+#include "Terminal_module/terminal.h"
 #define REPL_VERSION "1.0"
 #define NOT_FOUND_FUNCTION ((char *)0)
 #define INIT_REPL_ERROR 2
