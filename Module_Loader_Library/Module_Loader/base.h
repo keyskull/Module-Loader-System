@@ -38,16 +38,13 @@ extern "C"
 
 
 	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
-	
-	typedef const struct _Signal{
-		const enum SecurityLevel security_level;
-		Ownership_stack *const Module_handle;
-	}Signal;
+
 	typedef const struct _Receipt{
 		const time_t create_time;
-		const void *const used_func;
-		const char *const info;
-		Signal signal;
+		 void *const used_func;
+		 char *const info;
+		 enum SecurityLevel security_level;
+		Ownership_stack *const Module_handle;
 	}Receipt;
 
 	/*system function*/
