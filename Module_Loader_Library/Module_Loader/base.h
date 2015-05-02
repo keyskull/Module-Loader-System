@@ -1,14 +1,7 @@
 ﻿#ifndef BASE_H
 #define BASE_H
-#define WINDOWS_SYSTEM
 #define INIT_CACHE_SIZE 100
-#define CMD_CACHE 30
-#define _EXIT_SUCCESS ((void *)EXIT_SUCCESS)
-#define _EXIT_FAILURE ((void *)EXIT_FAILURE)
-#define EXIT_TIMEOUT 2
-#define _EXIT_TIMEOUT ((void *)EXIT_TIMEOUT)
-#define EXIT_MEMORY_ERROR 3
-#define _EXIT_MEMORY_ERROR ((void *)EXIT_MEMORY_ERROR)
+#define CMD_CACHE 100
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -18,25 +11,35 @@ extern "C"
 {
 #endif                          /* __cplusplus */
 
+	typedef const struct _Module_Info Module_Info;
 
+
+
+	/*module*/
 	typedef const struct _Module_Info_stack{
 		int length;
-		struct _Module_Info *const Compatible;
-	}Compatible_stack;
+		Module_Info *const module;
+	}Module_stack;
+
+
 	typedef const struct _Module_Info{
-		char *const Author;
-		char *const Module_Name;
-		int Version;
-		Compatible_stack * const Compatible;
-		struct _Module_Info *const Necessary_Module;
+		void * const Module_handle;
+		char * const Author;
+		char * const Module_Name;
+		float Version;
+		Module_stack * const Compatible;
+		Module_stack * const Necessary_Module;
 	}Module_Info;
+
 
 	typedef const struct _Ownership_stack{
 		Module_Info *const module;
 		void *const handle;
-	}Ownership_stack;
+	}Module_Owner;
 
 
+
+	/*Receipt*/
 	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
 
 	typedef const struct _Receipt{
@@ -44,14 +47,14 @@ extern "C"
 		 void *const used_func;
 		 char *const info;
 		 enum SecurityLevel security_level;
-		Ownership_stack *const Module_handle;
+		Module_Owner *const Module_handle;
 	}Receipt;
 
 	/*system function*/
 	
-	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Ownership_stack *const Module_info, const char *const additional_info);
-	
-
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Module_Owner *const Module_info, const char *const additional_info);
+	Module_Info Create_Moudle_Info(char *const Author, char *const Module_Name, float Version, Module_stack * const Compatible, Module_stack * const Necessary_Module);
+	Receipt *const Register_Module(Module_Info *const module_info);
 	/*misc function*/
 
 	char **const Tokenizer(char *args, const char Keyword);//分词器
