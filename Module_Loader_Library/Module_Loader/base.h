@@ -14,27 +14,19 @@ extern "C"
 	typedef const struct _Module_Info Module_Info;
 
 
-
 	/*module*/
 	typedef const struct _Module_Info_stack{
 		int length;
-		Module_Info *const module;
+		void *const Module_Handle;
 	}Module_stack;
 
 
-	typedef const struct _Module_Info{
-		void * const Module_handle;
-		char * const Author;
-		char * const Module_Name;
-		float Version;
-		Module_stack * const Compatible;
-		Module_stack * const Necessary_Module;
-	}Module_Info;
-
 
 	typedef const struct _Ownership_stack{
-		Module_Info *const module;
-		void *const handle;
+		void * Module_Handle;
+		char *(*Get_Module_Name)(void * Module_Handle);
+		char *(*Get_Author_Name)(void * Module_Handle);
+		float(*Get_Author_Version)(void * Module_Handle);
 	}Module_Owner;
 
 
