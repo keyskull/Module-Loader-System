@@ -10,10 +10,19 @@ JNIEXPORT jint JNICALL intMethod
 	return c;
 }
 
-static JNI_Methods_Stack *jni_methods_stack;
+typedef struct VM_JNI_Stack
+{	
+
+	JNI_Methods_Stack **(*Get_JNI_Onload_Methods_Stack)(JavaVM *);
+}VM_JNI_Stack;
+
+
+
+static JNI_Methods_Stack *jni_methods_stack=NULL;
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void *reserved) //这是JNI_OnLoad的声明，必须按照这样的方式声明
 {
+	if (jni_methods_stack == NULL)return JNI_VERSION_1_8;
 	JNIEnv* env = NULL; //注册时在JNIEnv中实现的，所以必须首先获取它
 	jint result = -1;
 	if ((*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_8) != JNI_OK)return -1; //从JavaVM获取JNIEnv，一般使用1.4的版本

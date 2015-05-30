@@ -1,7 +1,7 @@
 #include "Module_Loader/base.h"
 #include "REPL_module/repl.h"
 #include "Terminal_module/terminal.h"
-#include<string.h>
+#include <string.h>
 #include <time.h>
 
 

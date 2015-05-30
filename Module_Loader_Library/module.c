@@ -10,7 +10,7 @@ typedef const struct _Module_Info{
 
 Module_Info *Create_Module_Handle(char* Author_name, char * Module_Name, float Version){
 	const time_t now = time(NULL);
-	Module_Info mh = { now, Author_name, Module_Name, Version };
+	const Module_Info mh = { now, Author_name, Module_Name, Version };
 	Module_Info *module_handle = malloc(sizeof(Module_Info));
 	memmove(module_handle, &mh, sizeof(Module_Info));
 	return module_handle;
@@ -30,8 +30,7 @@ float Get_Author_Version(void * Module_Handle){
 }
 
 Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version){
-
-	const Module_Owner module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version };
-	
-
+	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version };
+	Module_Owner *module_owner = malloc(sizeof(Module_Owner));
+	return module_owner;
 }

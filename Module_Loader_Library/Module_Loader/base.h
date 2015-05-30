@@ -44,7 +44,7 @@ extern "C"
 
 	/*system function*/
 	
-	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Module_Owner *const Module_info, const char *const additional_info);
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, const char *const additional_info);
 	Module_Info Create_Moudle_Info(char *const Author, char *const Module_Name, float Version, Module_stack * const Compatible, Module_stack * const Necessary_Module);
 	Receipt *const Register_Module(Module_Info *const module_info);
 	/*misc function*/
