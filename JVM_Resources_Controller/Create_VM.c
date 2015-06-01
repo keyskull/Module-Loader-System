@@ -10,8 +10,7 @@ JNIEXPORT jint JNICALL intMethod
 	return c;
 }
 
-typedef struct VM_JNI_Stack
-{	
+typedef struct VM_JNI_Stack{	
 
 	JNI_Methods_Stack **(*Get_JNI_Onload_Methods_Stack)(JavaVM *);
 }VM_JNI_Stack;

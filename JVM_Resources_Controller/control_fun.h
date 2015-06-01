@@ -9,9 +9,9 @@ struct _Library_Loaded{
 };
 
 typedef struct _JNI_Methods_Stack{
-	const id;
+	const int id;
 	int len;
-	char * ClassName;
+	char *const ClassName;
 	JNINativeMethod **Methods;
 	int(*add_Methods)(JNI_Methods_Stack *, JNINativeMethod);
 }JNI_Methods_Stack;
