@@ -2,7 +2,7 @@
 #include<string.h>
 #include<time.h>
 
-
+/*暂时停用次页所有功能*/
 Module_Info module_system_Info;
 
 

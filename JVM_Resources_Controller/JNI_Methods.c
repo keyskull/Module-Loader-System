@@ -45,6 +45,8 @@ Receipt * add_jni_methods_stack(JavaVM * vm, JNI_Methods_Stack *jni_methods_stac
 	if (jvm_stack->jni_methods_array_len == 0){
 		if (jvm_stack->vm_methods_array != NULL)free(jvm_stack->vm_methods_array);
 		jvm_stack->vm_methods_array = malloc(sizeof(JNI_Methods_Stack *));
+		jvm_stack->vm_methods_array[0] = jni_methods_stack;
+		jvm_stack->jni_methods_array_len += 1;
 	}
 	else{
 			JNI_Methods_Stack ** jni_m = malloc(sizeof(JNI_Methods_Stack *)*(jvm_stack->jni_methods_array_len + 1));

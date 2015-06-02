@@ -2,13 +2,19 @@
 #include<string.h>
 
 typedef const struct _Module_Info{
-	const time_t Create_time;
-	const char * const Author_Name;
-	const char * const Module_Name;
-	const float Version;
+	time_t Create_time;
+	char * const Author_Name;
+	char * const Module_Name;
+	float Version;
 }Module_Info;
 
-Module_Info *Create_Module_Handle(char* Author_name, char * Module_Name, float Version){
+typedef struct _Module_Stack{
+	Module_Info * module_info;
+	struct _Module_Stack * next;
+}Module_Stack;
+static Module_Stack *_Module_stack = NULL;
+
+void *Create_Module_Handle(char* Author_name, char * Module_Name, float Version){
 	const time_t now = time(NULL);
 	const Module_Info mh = { now, Author_name, Module_Name, Version };
 	Module_Info *module_handle = malloc(sizeof(Module_Info));
@@ -16,21 +22,41 @@ Module_Info *Create_Module_Handle(char* Author_name, char * Module_Name, float V
 	return module_handle;
 }
 
-char * Get_Module_Name(void * Module_Handle){
-	Module_Info *module=Module_Handle;
-	return memcpy(NULL, module->Module_Name, sizeof(char)*strlen(module->Module_Name));
-}
-char * Get_Author_Name(void * Module_Handle){
-	Module_Info *module = Module_Handle;
-	return module->Author_Name;
-}
-float Get_Author_Version(void * Module_Handle){
-	Module_Info *module = Module_Handle;
-	return module->Version;
+/*system-func*/
+Module_Info *Check_Handle(void * Module_Handle){
+	if (_Module_stack == NULL)return NULL;
+	else{
+		Module_Stack * module_stack_head = _Module_stack, *module_stack = module_stack_head;
+		do module_stack = module_stack->next;
+		while (module_stack->module_info != Module_Handle || module_stack->module_info !=module_stack_head);
+		if (module_stack == Module_Handle)return Module_Handle;
+		else return NULL;
+	}
 }
 
+
+/*end system-func*/
+
+/* 用户的指针函数*/
+char * Get_Module_Name(Module_Owner * Module_Owner){
+	Module_Info *module = Check_Handle(Module_Owner);
+	if (module!=NULL)return module->Module_Name;
+	else NULL;
+}
+char * Get_Author_Name(Module_Owner * Module_Owner){
+	Module_Info *module = Check_Handle(Module_Owner);
+	if (module != NULL)return module->Author_Name;
+	else NULL;
+}
+float Get_Author_Version(Module_Owner * Module_Owner){
+	Module_Info *module = Check_Handle(Module_Owner);
+	if (module != NULL)return module->Version;
+	else NULL;
+}
+/*end user-point-func*/
 Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version){
 	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version };
 	Module_Owner *module_owner = malloc(sizeof(Module_Owner));
+	memmove(module_owner, &_module_owner, sizeof(Module_Owner));
 	return module_owner;
 }
