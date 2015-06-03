@@ -39,7 +39,22 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void *reserved) //这是JNI_OnLoad的声明，必
 	return JNI_VERSION_1_8; //这里很重要，必须返回版本，否则加载会失败。
 }
 
-int Create_VM(JavaVMOption options[], char * Main_ClassName){
+
+
+/*point-VM-func-stack*/
+int Run_main_method(JavaVM *vm){
+	return 1;
+}
+int Run_Jni_Onload(JavaVM *vm){
+	JNI_OnLoad(vm, NULL);
+	return 1;
+}
+int Stop_vm(JavaVM *vm){
+	return 1;
+}
+/*end point-VM-func-stack*/
+
+VM_func_stack * Create_VM(JavaVMOption options[], char * Main_ClassName){
 
 	JNIEnv *env;
 	JavaVM *jvm;
@@ -55,10 +70,11 @@ int Create_VM(JavaVMOption options[], char * Main_ClassName){
 	vm_args.nOptions = 1;
 	vm_args.options = options;
 
-	// 启动虚拟机  
-	status = JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);
+	status = JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);//创建虚拟机
 
 	if (status != JNI_ERR){
+		return alloc_VM_func_stack(jvm);
+		/*
 		// 先获得class对象  
 		cls = (*env)->FindClass(env, Main_ClassName);
 		if (cls != 0){
@@ -75,13 +91,11 @@ int Create_VM(JavaVMOption options[], char * Main_ClassName){
 		(*jvm)->DestroyJavaVM(jvm);
 		system("pause");
 		return 0;
+		*/
 	}
-	else
-	{
+	else{
 		printf("JVM Created failed!\n");
-		system("pause");
-		return -1;
-
+		return NULL;
 	}
 
 }

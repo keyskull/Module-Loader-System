@@ -15,7 +15,16 @@ typedef struct _JNI_Methods_Stack{
 	JNINativeMethod **Methods;
 	int(*add_Methods)(JNI_Methods_Stack *, JNINativeMethod);
 }JNI_Methods_Stack;
+
+typedef struct _VM_func_stack{
+	JavaVM *const vm;
+	int(*Run_main_method)(JavaVM *vm);
+	int(*Run_Jni_Onload)(JavaVM *vm);
+	int(*Stop_vm)(JavaVM *vm);
+
+}VM_func_stack;
+VM_func_stack * alloc_VM_func_stack(JavaVM *vm);
 JNI_Methods_Stack *alloc_JNI_Methods_Stack(JavaVM * vm, char * ClassName);
 
 
-int Create_VM(JavaVMOption options[], char * Main_ClassName);
+VM_func_stack* Create_VM(JavaVMOption options[], char * Main_ClassName);
