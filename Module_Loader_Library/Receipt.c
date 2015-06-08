@@ -33,6 +33,6 @@ Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLe
 	return receipt;
 }
 
-void Check_Receipt(){
+void Get_Receipt(){
 
 }

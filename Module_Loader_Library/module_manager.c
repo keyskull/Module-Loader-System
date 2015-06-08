@@ -3,6 +3,7 @@
 #include<time.h>
 
 /*暂时停用此页所有功能*/
+/*
 Module_Info module_system_Info;
 
 
@@ -51,6 +52,7 @@ static Receipt *const _Register_Module(Module_Info *const module_info, Receipt *
 }
 
 Receipt *const Register_Module(Module_Info *const module_info){ return _Register_Module(module_info, Module_manager); }
+*/
 /*
 Module_Info Create_Moudle_Info(char *const Author, char *const Module_Name, float Version, Module_stack * const Compatible, Module_stack * const Necessary_Module){
 	

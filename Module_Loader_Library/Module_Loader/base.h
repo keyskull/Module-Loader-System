@@ -15,12 +15,12 @@ extern "C"
 
 
 	/*module*/
+	/*
 	typedef const struct _Module_Info_stack{
 		int length;
 		void *const Module_Handle;
 	}Module_stack;
-
-
+	*/
 
 	typedef const struct _Ownership_stack{
 		void * Module_Handle;
@@ -44,8 +44,8 @@ extern "C"
 
 	/*system function*/
 	
-	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, const char *const additional_info);
-	Receipt *const Register_Module(Module_Info *const module_info);
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Module_Owner *const Module_info,const char *const additional_info);
+	//Receipt *const Register_Module(Module_Info *const module_info);
 	Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version);
 
 	/*misc function*/
