@@ -3,7 +3,10 @@
 #include<string.h>
 #include"control_fun.h"
 #include <time.h>
+
+
 /*需要留接口*/
+/*
 typedef struct _JVM_Stack
 {
 	int jni_methods_array_len;
@@ -13,10 +16,11 @@ typedef struct _JVM_Stack
 }JVM_Stack;
 
 static JVM_Stack * jvm_stack = NULL;
-
+*/
 
 
 /*start JVM_Stack的操作函数*//*需要修改*/
+/*
 JVM_Stack * Get_JVM_Stack(JavaVM * vm){
 	JVM_Stack * vm_stack;
 	if (jvm_stack == NULL){
@@ -39,9 +43,12 @@ JVM_Stack * Get_JVM_Stack(JavaVM * vm){
 		}
 	}
 }
-
+*/
 /*end JVM_Stack control-fun*/
+
+
 /*start JVM_Stack的指针函数*/
+/*
 Receipt * add_jni_methods_stack(JavaVM * vm, JNI_Class_Stack *jni_class_stack){
 	JVM_Stack *jvm_stack = Get_JVM_Stack(vm);
 	if (jvm_stack->jni_methods_array_len == 0){
@@ -52,9 +59,9 @@ Receipt * add_jni_methods_stack(JavaVM * vm, JNI_Class_Stack *jni_class_stack){
 		return Create_Receipt(add_jni_methods_stack, SUCCESS, Get_This_Model_Handle(), "Created New JNI Methods Stack!");
 	}
 	else{
-		if (jvm_stack->jni_methods_array_len > 1000){
+		if (jvm_stack->jni_methods_array_len > 1000)
+			return Create_Receipt(add_jni_methods_stack, ERROR, Get_This_Model_Handle(), "Memory error.");
 
-		}
 		JNI_Class_Stack ** jni_m = malloc(sizeof(JNI_Class_Stack *)*(jvm_stack->jni_methods_array_len + 1));
 		memmove(jni_m, jvm_stack, sizeof(JNI_Class_Stack)*jvm_stack->jni_methods_array_len);
 		jni_m[jvm_stack->jni_methods_array_len] = jni_class_stack;
@@ -64,13 +71,13 @@ Receipt * add_jni_methods_stack(JavaVM * vm, JNI_Class_Stack *jni_class_stack){
 		return Create_Receipt(add_jni_methods_stack, SUCCESS, Get_This_Model_Handle(), "Updated JNI Methods Stack!");
 	}
 }
+*/
+//end JVM_Stack point-fun
+/*以上停用*/
 
-/*end JVM_Stack point-fun*/
 
 
-
-
-/*start JNI_Methods_Stack 的指针函数*/
+//start JNI_Class_Stack 的指针函数
 int add_Method(JNI_Class_Stack *jni_methods_stack, JNINativeMethod jnm){
 	JNINativeMethod **jni_method;
 	if (jni_methods_stack != NULL){
@@ -93,13 +100,12 @@ int Clean_all_Methods(JNI_Class_Stack *jni_methods_stack){
 	//working
 	return 0;
 }
-/*end JNI_Methods_Stack  point-fun*/
+//end JNI_Class_Stack  point-fun
+
 JNI_Class_Stack *alloc_JNI_Class_Stack(JavaVM * vm, char * ClassName){
 	JNI_Class_Stack _jni_methods_stack = { (int)clock(), 0, ClassName, NULL, add_Method, Remove_Methods, Clean_all_Methods };
 	JNI_Class_Stack *jni_methods_stack = malloc(sizeof(JNI_Class_Stack));
 	memset(jni_methods_stack, 0, sizeof(JNI_Class_Stack));
 	memmove(jni_methods_stack, &_jni_methods_stack, sizeof(JNI_Class_Stack));
-	JVM_Stack *jvm_stack=Get_JVM_Stack(vm);
-	jvm_stack->vm_class_stack = jni_methods_stack;
 	return jni_methods_stack;
 }

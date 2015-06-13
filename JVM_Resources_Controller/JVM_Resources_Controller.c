@@ -10,7 +10,7 @@ JNIEXPORT jint JNICALL intMethod
 
 static Module_Owner * module_owner = NULL;
 
-/*程序入口*/
+/*模块入口*/
 int Create_JVM_Management(){
 	SetEnvironmentVariable("_ALT_JAVA_HOME_DIR", "C:\\cygwin64\\home\\Jane\\jdk\\openjdk9\\build\\windows-x86_64-normal-server-release\\images\\jdk");
 	JavaVMOption options[1];
