@@ -20,7 +20,7 @@ static int User_manager(Event *event){
 	static User_stack *user_stack = NULL;
 	static void *Event_cache = NULL;
 	clock_t _clock = clock() + 30000;
-	while (Event_cache != NULL)	if (clock()>_clock)return EXIT_TIMEOUT;
+	while (Event_cache != NULL)	if (clock()>_clock)return -3;//需要修改
 	Event_cache = event->func;
 
 	User_stack *const _user_stack = malloc(sizeof(User_stack));
@@ -60,7 +60,7 @@ static int User_manager(Event *event){
 User_struct * Add_User(char *name){
 	Event event = { Add_User, name, NULL };
 	if (User_manager(&event) == EXIT_SUCCESS)return event.user_struct;
-	else return _EXIT_FAILURE;
+	else return 2;//需要修改
 }
 
 int Remove_User(User_struct *user){ 

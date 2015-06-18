@@ -1,10 +1,9 @@
 #include "Module_Loader/base.h"
 #include<stdlib.h>
 #include<string.h>
-#include"control_fun.h"
 #include <time.h>
 
-
+/*停用此页*/
 /*需要留接口*/
 /*
 typedef struct _JVM_Stack
@@ -73,39 +72,6 @@ Receipt * add_jni_methods_stack(JavaVM * vm, JNI_Class_Stack *jni_class_stack){
 }
 */
 //end JVM_Stack point-fun
-/*以上停用*/
 
 
 
-//start JNI_Class_Stack 的指针函数
-int add_Method(JNI_Class_Stack *jni_methods_stack, JNINativeMethod jnm){
-	JNINativeMethod **jni_method;
-	if (jni_methods_stack != NULL){
-		jni_method = malloc(sizeof(JNINativeMethod)*(jni_methods_stack->len + 1));
-		memset(jni_method, 0, sizeof(JNINativeMethod)*(jni_methods_stack->len + 1));
-		if (jni_methods_stack->Methods != NULL)memmove(jni_method, jni_methods_stack->Methods, sizeof(JNINativeMethod)*(jni_methods_stack->len));
-		memmove(&jnm, jni_method[jni_methods_stack->len], sizeof(JNINativeMethod));
-		jni_methods_stack->len += 1;
-		jni_methods_stack->Methods = jni_method;
-		return EXIT_SUCCESS;
-	}
-	else 
-	return EXIT_FAILURE;
-}
-int Remove_Methods(JNI_Class_Stack *jni_methods_stack, JNINativeMethod jnm){
-	//working
-	return 0;
-}
-int Clean_all_Methods(JNI_Class_Stack *jni_methods_stack){
-	//working
-	return 0;
-}
-//end JNI_Class_Stack  point-fun
-
-JNI_Class_Stack *alloc_JNI_Class_Stack(JavaVM * vm, char * ClassName){
-	JNI_Class_Stack _jni_methods_stack = { (int)clock(), 0, ClassName, NULL, add_Method, Remove_Methods, Clean_all_Methods };
-	JNI_Class_Stack *jni_methods_stack = malloc(sizeof(JNI_Class_Stack));
-	memset(jni_methods_stack, 0, sizeof(JNI_Class_Stack));
-	memmove(jni_methods_stack, &_jni_methods_stack, sizeof(JNI_Class_Stack));
-	return jni_methods_stack;
-}

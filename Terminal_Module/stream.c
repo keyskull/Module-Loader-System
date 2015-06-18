@@ -24,3 +24,4 @@ int get_in(STREAM *stream){
 
 	return EXIT_SUCCESS;
 }
+

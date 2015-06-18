@@ -1,4 +1,4 @@
-﻿/*
+/*
  * terminal.h
  *
  *  Created on: 2014年11月19日
@@ -10,6 +10,7 @@
 #ifndef __TERMINAL_H__
 #define __TERMINAL_H__
 #include <time.h>  
+#include "Module_Loader/base.h"
 #include "User_module/user.h"
 
 typedef struct _running_func_stack{
@@ -35,6 +36,8 @@ extern "C"
 #endif                          /* __cplusplus */
 Terminal_data  *Apply_terminal(User_Info * user);
 int Kill_terminal(Terminal_data * terminal);
+Module_Owner * Get_This_Model_Owner_Key();
+Receipt * Init_Terminal();
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */
