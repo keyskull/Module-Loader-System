@@ -27,6 +27,8 @@ extern "C"
 		char *(*Get_Module_Name)(void * Module_Handle);
 		char *(*Get_Author_Name)(void * Module_Handle);
 		float(*Get_Author_Version)(void * Module_Handle);
+		_Bool (*Have_Module)(char * Module_Name);
+		_Bool (*Get_Module)(char * Module_Name);
 	}Module_Owner;
 
 

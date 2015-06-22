@@ -68,8 +68,9 @@ Command_struct *Control(void){
 		strcpy(__command,command);
 		strcat(__command, _command);
 		free(command);
-		command = __command;
+		memmove(command, __command, CMD_CACHE*sizeof(char));
 	}
+	
 	Command_struct * cs = Analysis_command(command);
 	free(command);
 	return cs;

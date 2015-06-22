@@ -1,6 +1,6 @@
 #include "Module_Loader/base.h"
 #include<string.h>
-
+#include<stdbool.h>
 typedef const struct _Compatible_List{
 	char* MID;
 }Compatible_List;
@@ -64,16 +64,26 @@ float Get_Author_Version(Module_Owner * Module_Owner){
 	if (module != NULL)return module->Version;
 	else NULL;
 }
+_Bool Have_Module(char * Module_Name){
+	//δдequals
+	return true;
+}
+
+_Bool Get_Module(char * Module_Name){
+	//δдequals
+
+	return true;
+}
 /*end user-point-func*/
 Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version){
-	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version };
+	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version, Have_Module, Get_Module };
 	Module_Owner *module_owner = malloc(sizeof(Module_Owner));
 	memmove(module_owner, &_module_owner, sizeof(Module_Owner));
 	return module_owner;
 }
 
 Module_Owner *Register_Module_Info_PLUS_Compatible_List(char* Author_name, char * Module_Name, float Version){
-	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version };
+	const Module_Owner _module_owner = { Create_Module_Handle(Author_name, Module_Name, Version), Get_Module_Name, Get_Author_Name, Get_Author_Version, Have_Module, Get_Module };
 	Module_Owner *module_owner = malloc(sizeof(Module_Owner));
 	memmove(module_owner, &_module_owner, sizeof(Module_Owner));
 	return module_owner;

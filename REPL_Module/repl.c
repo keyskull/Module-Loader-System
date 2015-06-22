@@ -6,8 +6,30 @@
 #include <time.h>
 
 
-/*start this_Module*/
+typedef struct Repl_data_struct_Stack{
+	Repl_data_struct * repl_data;
+	struct Repl_data_struct_Stack *next;
+}Repl_Stack;
 
+Repl_Stack *repl_stack = NULL;
+
+Receipt * Save_repl(Repl_data_struct * repl_data){
+	Repl_Stack *_repl_stack = malloc(sizeof(Repl_Stack));
+	_repl_stack->repl_data = repl_data;
+	if (repl_stack == NULL){
+		repl_stack = _repl_stack;
+		repl_stack->next = repl_stack;
+	}
+	else{
+		_repl_stack->next = repl_stack;
+		repl_stack->next = _repl_stack;
+	}
+	return Create_Receipt(Save_repl, SUCCESS, REPL_module_owner, "Init Save Shell success!");
+}
+
+
+
+/*start this_Module*/
 
 Receipt * Init_REPL(){
 	Module_Owner * module_owner = Register_Module_Info("Cullen Lee", "Init_REPL", 0.1f);
@@ -27,27 +49,37 @@ static int Init_repl(Repl_data_struct *repl_data){
 	return EXIT_SUCCESS;
 }
 
-int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){//need modify
+int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){
+	char *_cmd_name = malloc(sizeof(char)*(strlen(cmd_name)+1));
+	memmove(_cmd_name, cmd_name, (sizeof(char)*strlen(cmd_name)+1));
+	const CMD_struct cmd = { _cmd_name, func };
 	if (cmd_list_stack->cmd_list != NULL){
-		const CMD_struct cmd = { cmd_name, func };
-		memmove(&(cmd_list_stack->cmd_list[cmd_list_stack->length]), &cmd, sizeof(CMD_struct));
+		CMD_struct ** cmd_struct = malloc(sizeof(CMD_struct *) *(cmd_list_stack->length+1));
+		memmove(cmd_struct, cmd_list_stack->cmd_list, sizeof(CMD_struct *) *cmd_list_stack->length);
+		cmd_struct[cmd_list_stack->length] = malloc(sizeof(CMD_struct));
+		memmove(cmd_struct[cmd_list_stack->length], &cmd, sizeof(CMD_struct));
+		cmd_list_stack->cmd_list = cmd_struct;
 		cmd_list_stack->length++;
 	}
-	else return EXIT_FAILURE;
+	else {
+		CMD_struct ** cmd_struct = malloc(sizeof(CMD_struct *));
+		cmd_struct[cmd_list_stack->length]= malloc(sizeof(CMD_struct));
+		memmove(cmd_struct[cmd_list_stack->length], &cmd, sizeof(CMD_struct));
+		cmd_list_stack->cmd_list = cmd_struct;
+		cmd_list_stack->length=1;
+	}
 	return EXIT_SUCCESS;
 }
 
-static Function Find_command(CMD_list_stack cmd_list, const unsigned char * const command){
+static Function Find_command(CMD_list_stack *cmd_list,char * command){
 
-	for (int i = 0; i<(int)cmd_list.length; i++){
-		if (!strcoll((char *)cmd_list.cmd_list[i].cmd_name, command)){
-			return cmd_list.cmd_list[i].func;
-		}
-	}
+	for (int i = 0; i<cmd_list->length; i++)
+		if (!strcoll(cmd_list->cmd_list[i]->cmd_name, command))
+			return cmd_list->cmd_list[i]->func;
 	return (Function)Not_Found_function;
 }
 
-static int Run_command(Repl_data_struct *repl_data, const unsigned char *const command, const Args_struct *const args){
+static int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *const args){
 	if (command){
 		Function cmd = Find_command(repl_data->cmd_list_stack, command);
 		if (cmd == (Function)Not_Found_function){
@@ -89,13 +121,17 @@ static int repl(Repl_data_struct *repl_data){
 }
 
 
-Terminal_Receipt *const Apply_shell(Terminal_data *terminal){
-	CMD_struct * cmd_struct = malloc(INIT_CACHE_SIZE / 2 * sizeof(CMD_struct));//ÐèÒªÐÞ¸ÄINIT_CACHE_SIZE
-	CMD_list_stack cmd_list_stack = { cmd_struct, 0 };
-	Init_base_command(&cmd_list_stack);
-	Repl_data_struct repl_data = { 0, terminal, cmd_list_stack };
-	int i = repl(&repl_data);
-	free(cmd_struct);
+Receipt *const Apply_shell(Terminal_data *terminal){
+	CMD_list_stack *cmd_list_stack = malloc(sizeof(CMD_list_stack));
+	cmd_list_stack->cmd_list = NULL;
+	cmd_list_stack->length = 0;
+	Init_base_command(cmd_list_stack);
+	Repl_data_struct * repl_data = malloc(sizeof(Repl_data_struct));
+	repl_data->state = 0;
+	repl_data->terminal = terminal;
+	repl_data->cmd_list_stack = cmd_list_stack;
+	Save_repl(repl_data);
+	int i = repl(repl_data);
 	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)
 		return Create_Receipt(Apply_shell, ERROR, REPL_module_owner, "run fall");
 	else return Create_Receipt(Apply_shell, SUCCESS, REPL_module_owner, "run succes");

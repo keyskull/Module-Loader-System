@@ -33,9 +33,9 @@ char *base_time(const Args_struct *const args, Repl_data_struct * const repl_dat
 char *base_help(const Args_struct *const args, Repl_data_struct * const repl_data){
 	char *c = calloc(INIT_CACHE_SIZE, sizeof(char));
 	strcpy(c, "this is Mylib help command\n");
-	for (int i = 0; i < repl_data->cmd_list_stack.length; ++i){
-		strcat(c, repl_data->cmd_list_stack.cmd_list[i].cmd_name);
-		if (i != repl_data->cmd_list_stack.length-1)strcat(c, "\n");
+	for (int i = 0; i < repl_data->cmd_list_stack->length; ++i){
+		strcat(c, repl_data->cmd_list_stack->cmd_list[i]->cmd_name);
+		if (i != repl_data->cmd_list_stack->length-1)strcat(c, "\n");
 
 	}
 

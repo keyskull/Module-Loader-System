@@ -5,6 +5,7 @@
 #include "handle.h"
 
 
+
 typedef struct _JVM_Handle JVM_Handle;
 struct _JVM_Handle{
 	JavaVM* vm;
@@ -17,6 +18,8 @@ static struct _JVM_Handle_stack *JVM_Handle_POOL = NULL;//JVMÊı¾İ³Ø
 
 
 //start Handle function
+
+
 JVM_Handle *Get_JVM_Handle(JavaVM *vm){
 	if (JVM_Handle_POOL == NULL)return NULL;
 	else {
@@ -29,8 +32,6 @@ JVM_Handle *Get_JVM_Handle(JavaVM *vm){
 		else return jvm_handle_stack->jvm_handle;
 	}
 }
-
-
 
 JVM_Handle * Check_JVM_Handle(void * JVM_Handle){
 	if (JVM_Handle_POOL == NULL)return NULL;
@@ -50,7 +51,7 @@ JVM_Handle *Create_JVM_Handle(JavaVM *vm, char * Main_ClassName){
 	jvm_handle->vm = vm;
 	jvm_handle->mainclass = Main_ClassName;
 	jvm_handle->jni_class_list_len = 0;
-	jvm_handle->jni_class_list = Get_JNI_Onload_Methods_Stack(vm);
+	jvm_handle->jni_class_list = NULL;
 	struct _JVM_Handle_stack * jvm_handle_stack = malloc(sizeof(struct _JVM_Handle_stack));
 	jvm_handle_stack->jvm_handle = jvm_handle;
 	if (JVM_Handle_POOL == NULL){
@@ -70,24 +71,31 @@ JVM_Handle *Create_JVM_Handle(JavaVM *vm, char * Main_ClassName){
 
 
 
-
 /*start VM_func_stackµÄÖ¸Õëº¯Êı*/
 int Add_Class_Stack(void * _JVM_Handle, JNI_Class_Stack * jni_class_stack){//Î´Íê³É
 	if (jni_class_stack == NULL)return EXIT_FAILURE;
 	else{
 		JVM_Handle * jvm_handle = Check_JVM_Handle(_JVM_Handle);
-		if (jvm_handle->jni_class_list_len == 0)
-			if (jvm_handle->jni_class_list == NULL){
+		if (jvm_handle->jni_class_list_len == 0){
+			if (jvm_handle->jni_class_list != NULL)free(jvm_handle->jni_class_list);
 				jvm_handle->jni_class_list = malloc(sizeof(JNI_Class_Stack *)*jvm_handle->jni_class_list_len + 1);
-			}
-			else free(jvm_handle->jni_class_list);
-
+				jvm_handle->jni_class_list[0] = jni_class_stack;
+		}
+		else {
+			JNI_Class_Stack **_jni_class_list = malloc(sizeof(JNI_Class_Stack *)*jvm_handle->jni_class_list_len + 1);
+			memmove(_jni_class_list, jvm_handle->jni_class_list, sizeof(JNI_Class_Stack *)*jvm_handle->jni_class_list_len);
+			_jni_class_list[jvm_handle->jni_class_list_len] = jni_class_stack;
+			jvm_handle->jni_class_list = _jni_class_list;
+		}
+		return EXIT_SUCCESS;
 	}
 }
-int Run_main_method(void * _JVM_Handle){
+
+Receipt * Run_main_method(void * _JVM_Handle){
 	JVM_Handle * jvm_handle = Check_JVM_Handle(_JVM_Handle);
 	JavaVM *vm = jvm_handle->vm;
-	JNIEnv *env = (*vm)->GetEnv(vm, NULL, JNI_VERSION_1_8);
+	JNIEnv *env;
+	if ((*vm)->GetEnv(vm, (void **)&env, JNI_VERSION_1_4) != JNI_ERR){
 	jclass cls = (*env)->FindClass(env, jvm_handle->mainclass);
 	jmethodID mid;
 	if (cls != 0){
@@ -95,9 +103,15 @@ int Run_main_method(void * _JVM_Handle){
 		(*env)->CallStaticObjectMethod(env, cls, mid);
 	}
 	jthrowable throws = (*env)->ExceptionOccurred(env);
-	if (throws != NULL)(*env)->ExceptionDescribe(env);
+	if (throws != NULL){
+		(*env)->ExceptionDescribe(env);
+		(*vm)->DestroyJavaVM(vm);
+		return Create_Receipt(Run_main_method, ERROR, My_module_owner, "Main Class run failed!");
+	}
 	(*vm)->DestroyJavaVM(vm);
-	return 1;
+	return Create_Receipt(Run_main_method, SUCCESS, My_module_owner, "Main Class run successed!");
+	}
+	else return Create_Receipt(Run_main_method, ERROR, My_module_owner, "Main Class run failed!");
 }
 int Run_Jni_Onload(void * _JVM_Handle){
 	JVM_Handle * jvm_handle = Check_JVM_Handle(_JVM_Handle);
@@ -110,8 +124,9 @@ int Stop_vm(void * _JVM_Handle){
 }
 
 int Recycling_resources(JavaVM *vm){
+	//Î´Íê³É
 	//×ÊÔ´»ØÊÕ¹¦ÄÜ
-	return NULL;
+	return 0;
 }
 /*end point to VM_func_stack*/
 
@@ -130,8 +145,7 @@ int add_Method(JNI_Class_Stack *jni_methods_stack, JNINativeMethod jnm){//¿ÉÄÜÓĞ
 		jni_methods_stack->Methods_List = jni_method;
 		return EXIT_SUCCESS;
 	}
-	else
-		return EXIT_FAILURE;
+	else return EXIT_FAILURE;
 }
 int Remove_Methods(JNI_Class_Stack *jni_methods_stack, JNINativeMethod jnm){
 	//working
@@ -169,7 +183,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void *reserved){ //ÕâÊÇJNI_OnLoadµÄÉùÃ÷£¬±
 	JNIEnv* env = NULL; //×¢²áÊ±ÔÚJNIEnvÖĞÊµÏÖµÄ£¬ËùÒÔ±ØĞëÊ×ÏÈ»ñÈ¡Ëü
 	jclass cls = NULL;
 	jint result = -1;
-	if ((*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_8) != JNI_OK)return -1; //´ÓJavaVM»ñÈ¡JNIEnv£¬Ò»°ãÊ¹ÓÃ1.4µÄ°æ±¾
+	if ((*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_4) != JNI_OK)return -1; //´ÓJavaVM»ñÈ¡JNIEnv£¬Ò»°ãÊ¹ÓÃ1.4µÄ°æ±¾
 	for (int i = 0; i < jvm_handle->jni_class_list_len; i++){
 		cls = (*env)->FindClass(env, jvm_handle->jni_class_list[i]->ClassName); //ÕâÀï¿ÉÒÔÕÒµ½Òª×¢²áµÄÀà£¬Ç°ÌáÊÇÕâ¸öÀàÒÑ¾­¼ÓÔØµ½javaĞéÄâ»úÖĞ¡£ ÕâÀïËµÃ÷£¬¶¯Ì¬¿âºÍÓĞnative·½·¨µÄÀàÖ®¼ä£¬Ã»ÓĞÈÎºÎ¶ÔÓ¦¹ØÏµ¡£
 		if (cls == NULL){
@@ -181,11 +195,11 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void *reserved){ //ÕâÊÇJNI_OnLoadµÄÉùÃ÷£¬±
 			return -1;
 		}
 	}
-	return JNI_VERSION_1_8; //ÕâÀïºÜÖØÒª£¬±ØĞë·µ»Ø°æ±¾£¬·ñÔò¼ÓÔØ»áÊ§°Ü¡£
+	return JNI_VERSION_1_4; //ÕâÀïºÜÖØÒª£¬±ØĞë·µ»Ø°æ±¾£¬·ñÔò¼ÓÔØ»áÊ§°Ü¡£
 }
 
 
-VM_stack * Create_VM(JavaVMOption options[], char * Main_ClassName){
+VM_stack * Create_VM(JavaVMOption options[],int options_len, char * Main_ClassName){
 	JNIEnv *env;
 	JavaVM *jvm;
 	JavaVMInitArgs vm_args;
@@ -196,8 +210,8 @@ VM_stack * Create_VM(JavaVMOption options[], char * Main_ClassName){
 	jobject obj;
 
 	memset(&vm_args, 0, sizeof(vm_args));
-	vm_args.version = JNI_VERSION_1_8;
-	vm_args.nOptions = 1;
+	vm_args.version = JNI_VERSION_1_4;
+	vm_args.nOptions = options_len;
 	vm_args.options = options;
 
 	status = JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);//´´½¨ĞéÄâ»ú

@@ -17,11 +17,11 @@ typedef struct _Args_struct{
 	char *const* args;
 }Args_struct;
 typedef struct _CMD_struct{
-	const char *const cmd_name;
-	const Function func;
+	 char * cmd_name;
+	 Function func;
 } CMD_struct;
 typedef struct _CMD_list_stack{
-	const CMD_struct *const cmd_list;
+	CMD_struct ** cmd_list;
 	unsigned short int length;
 } CMD_list_stack;
 /**end cmd_list_struct **/
@@ -33,8 +33,8 @@ typedef struct _Command_struct{
 }Command_struct;
 typedef struct _Repl_data_struct{
 	_Bool state;
-	Terminal_data *const terminal;
-	CMD_list_stack cmd_list_stack;
+	Terminal_data * terminal;
+	CMD_list_stack *cmd_list_stack;
 }Repl_data_struct;
 /**end repl struct**/
 #if defined(__cplusplus)
