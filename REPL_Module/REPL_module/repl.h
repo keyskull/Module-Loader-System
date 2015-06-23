@@ -47,9 +47,9 @@ const char *const Get_repl_version(void);
 int Init_base_command(CMD_list_stack *cmd_list);
 Command_struct *Control(void);
 int Add_command(CMD_list_stack *cmd_list,char *cmd_name,Function func);
-Module_Owner * Get_This_Model_Owner_Key();
-Receipt * Init_REPL();
-
+CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal);
+Receipt * Init_REPL(void);
+Receipt * Apply_shell(Terminal_data *terminal);
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

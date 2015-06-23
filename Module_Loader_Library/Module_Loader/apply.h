@@ -11,7 +11,6 @@
 extern "C"
 {
 #endif                          /* __cplusplus */
-int Apply_shell(Terminal_data *terminal);
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

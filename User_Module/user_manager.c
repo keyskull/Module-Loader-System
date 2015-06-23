@@ -3,18 +3,28 @@
 #include "User_module/authentication.h"
 #include <string.h>
 #include <time.h>
+
+typedef struct _User_Handle{
+	int status;
+	User_Info * user_info;
+	User_log * user_log;
+}User_Handle;
+
 typedef struct _User_stack{
-	User_struct *const user_struct;
+	User_Handle *const user_handle;
 	struct _User_stack *next;
 }User_stack;
+
+
 
 typedef struct _Event{
 	void * const func;
 	char * const user_name;
-	User_struct *user_struct;
+	User_data *user_struct;
 }Event;
 
 int Find_User(char *name);
+
 
 static int User_manager(Event *event){
 	static User_stack *user_stack = NULL;
@@ -29,18 +39,18 @@ static int User_manager(Event *event){
 		if (user_stack != NULL){	
 			User_stack *u = user_stack;
 			do{	++uid;
-			if (strcmp(event->user_name, u->user_struct->user_info->user_name) != 0)return EXIT_FAILURE;
+			if (strcmp(event->user_name, u->user_handle->user_info->user_name) != 0)return EXIT_FAILURE;
 			} while ((u = u->next) != user_stack);
 			_user_stack->next = user_stack;
 		}else _user_stack->next = _user_stack;
-		User_stack __user_stack = { malloc(sizeof(User_struct)), _user_stack->next };
+		User_stack __user_stack = { malloc(sizeof(User_data)), _user_stack->next };
 		User_Info _user = { uid, event->user_name };
 		User_Info *const user = malloc(sizeof(User_Info));
 		memcpy(user, &_user, sizeof(User_Info));
-		User_struct user_struct = { (const long)_clock, malloc(sizeof(User_log)), user };
-		memmove(__user_stack.user_struct, &user_struct, sizeof(User_struct));
+		User_data user_struct = { (const long)_clock, malloc(sizeof(User_log)), user };
+		memmove(__user_stack.user_handle, &user_struct, sizeof(User_data));
 		memcpy(_user_stack, &__user_stack, sizeof(User_stack));
-		event->user_struct = _user_stack->user_struct;
+		event->user_struct = _user_stack->user_handle;
 		user_stack = _user_stack;
 	}
 	else if (event->func == Remove_User){
@@ -57,18 +67,19 @@ static int User_manager(Event *event){
 	return EXIT_SUCCESS;
 }
 
-User_struct * Add_User(char *name){
+
+User_data * Add_User(char *name){
 	Event event = { Add_User, name, NULL };
 	if (User_manager(&event) == EXIT_SUCCESS)return event.user_struct;
 	else return 2;//ÐèÒªÐÞ¸Ä
 }
 
-int Remove_User(User_struct *user){ 
+int Remove_User(User_data *user){
 	Event event = { Remove_User, NULL, user };
 	return User_manager(&event);
 }
 
-User_struct * Get_User_Permission(Validated_License  *name){
+User_data * Get_User_Permission(Validated_License  *name){
 	return EXIT_SUCCESS;
 }
 

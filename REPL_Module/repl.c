@@ -27,11 +27,22 @@ Receipt * Save_repl(Repl_data_struct * repl_data){
 	return Create_Receipt(Save_repl, SUCCESS, REPL_module_owner, "Init Save Shell success!");
 }
 
+CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal){
+	if (repl_stack != NULL){
+		Repl_Stack *stack_head = repl_stack, *_repl_stack = stack_head;
+		do{
+			if (_repl_stack->repl_data->terminal != terminal)
+				_repl_stack = _repl_stack->next;
+			else return _repl_stack->repl_data->cmd_list_stack;
+		} while (_repl_stack!=stack_head);
+	}
+	return NULL;
+}
 
 
 /*start this_Module*/
 
-Receipt * Init_REPL(){
+Receipt * Init_REPL(void){
 	Module_Owner * module_owner = Register_Module_Info("Cullen Lee", "Init_REPL", 0.1f);
 	module_owner = module_owner->Module_Handle;
 	return Create_Receipt(Init_REPL, SUCCESS, REPL_module_owner, "Init REPL success!");
@@ -41,13 +52,6 @@ Receipt * Init_REPL(){
 char * Not_Found_function(char *args, Repl_data_struct * const repl_data){ return NOT_FOUND_FUNCTION; }
 const char *const Get_repl_version(void){ return REPL_VERSION; }
 
-static int Init_repl(Repl_data_struct *repl_data){
-	if (!repl_data)return EXIT_FAILURE;
-	else if (!repl_data->terminal)return EXIT_FAILURE;
-	else if (!repl_data->terminal->user_data)return EXIT_FAILURE;
-	repl_data->state = 1;
-	return EXIT_SUCCESS;
-}
 
 int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){
 	char *_cmd_name = malloc(sizeof(char)*(strlen(cmd_name)+1));
@@ -71,7 +75,7 @@ int Add_command(CMD_list_stack *cmd_list_stack, char *cmd_name, Function func){
 	return EXIT_SUCCESS;
 }
 
-static Function Find_command(CMD_list_stack *cmd_list,char * command){
+Function Find_command(CMD_list_stack *cmd_list,char * command){
 
 	for (int i = 0; i<cmd_list->length; i++)
 		if (!strcoll(cmd_list->cmd_list[i]->cmd_name, command))
@@ -79,8 +83,8 @@ static Function Find_command(CMD_list_stack *cmd_list,char * command){
 	return (Function)Not_Found_function;
 }
 
-static int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *const args){
-	if (command){
+int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *const args){
+	if (command[0]!='\0'){
 		Function cmd = Find_command(repl_data->cmd_list_stack, command);
 		if (cmd == (Function)Not_Found_function){
 			printf("%s command not found \n", command);
@@ -100,7 +104,7 @@ static int Run_command(Repl_data_struct *repl_data,char * command, const Args_st
 }
 
 
-static int repl(Repl_data_struct *repl_data){
+int repl(Repl_data_struct *repl_data){
 	/***Init***/
 	if (Init_repl(repl_data) == EXIT_FAILURE)return INIT_REPL_ERROR;
 	/***end Init***/
@@ -121,7 +125,7 @@ static int repl(Repl_data_struct *repl_data){
 }
 
 
-Receipt *const Apply_shell(Terminal_data *terminal){
+Receipt * Apply_shell(Terminal_data *terminal){
 	CMD_list_stack *cmd_list_stack = malloc(sizeof(CMD_list_stack));
 	cmd_list_stack->cmd_list = NULL;
 	cmd_list_stack->length = 0;
@@ -132,7 +136,6 @@ Receipt *const Apply_shell(Terminal_data *terminal){
 	repl_data->cmd_list_stack = cmd_list_stack;
 	Save_repl(repl_data);
 	int i = repl(repl_data);
-	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)
-		return Create_Receipt(Apply_shell, ERROR, REPL_module_owner, "run fall");
+	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)return Create_Receipt(Apply_shell, ERROR, REPL_module_owner, "run failed");
 	else return Create_Receipt(Apply_shell, SUCCESS, REPL_module_owner, "run succes");
 }

@@ -6,6 +6,7 @@
 #include"handle.h"
 
 Terminal_data *ter = NULL;
+VM_stack * vm = NULL;
 /*Module_Loader Jni_Class*/
 
 JNIEXPORT jboolean JNICALL Java_cn_Module_1Loader_Have_1Module
@@ -47,11 +48,11 @@ JNIEXPORT jboolean JNICALL Java_cn_Shell_1Module_Add_1Command
 
 }
 /*end Shell_Module Jni_Class*/
-/*模块入口*/
+
 Receipt * Create_JVM_Management(void){
 	JavaVMOption options[1];
 	options[0].optionString = "-Djava.class.path=./scala-library.jar;./Module_loader_System.jar";
-	VM_stack * vm = Create_VM(options,1, "JVM_Management");
+	vm = Create_VM(options,1, "JVM_Management");
 	JNI_Class_Stack *jc = alloc_JNI_Class_Stack("Module_Loader");
 	jc->add_Methods(jc, (JNINativeMethod){ "Have_Module", "(Ljava/lang/String;)Z", Java_cn_Module_1Loader_Have_1Module });
 	vm->Add_Class_Stack(vm, jc);
@@ -61,16 +62,22 @@ Receipt * Create_JVM_Management(void){
 	jc->add_Methods(jc, (JNINativeMethod){ "Add_Command", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", Java_cn_Shell_1Module_Add_1Command });
 	vm->Add_Class_Stack(vm, jc);
 	vm->Run_Jni_Onload(vm->JVM_Handle);//装载JNI函数
-	return vm->Run_main_method(vm->JVM_Handle);//运行JVM 管理模块
+	return Create_Receipt(Create_JVM_Management, SUCCESS, My_module_owner, "Init JVM Resources Controller Created!");
+		return vm->Run_main_method(vm->JVM_Handle);//运行JVM 管理模块
 }
 
+Receipt * Run_JVM_Management_func(char * func_name){
+
+}
 
 /*start this_Module*/
 
-
+/*模块入口*/
 Receipt * Init_JVM_Resources_Controller(void){
 	Module_Owner * module_owner = Register_Module_Info("Cullen Lee", "JVM_Resources_Controller", 0.1f);
 	My_module_owner = module_owner->Module_Handle;
+	Create_JVM_Management();
+
 	return Create_Receipt(Init_JVM_Resources_Controller, SUCCESS, My_module_owner, "Init JVM Resources Controller success!");
 }
 

@@ -1,92 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<DirectedGraph GraphDirection="TopToBottom" Layout="Sugiyama" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
-  <Nodes>
-    <Node Id="(@1 @2 @3 Member=Init_JVM_Resources_Controller)" Category="CodeSchema_Method" Bounds="77.2433333333333,0,224.026666666667,26" CodeSchemaProperty_IsPublic="True" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="Init_JVM_Resources_Controller‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="Receipt *" />
-    <Node Id="@10" Category="CodeSchema_Method" Bounds="20,96,338.513333333333,142" CodeSchemaProperty_IsPublic="True" Group="Expanded" Icon="9566f469-ea18-488c-8b6b-1118f94c8ec1" Label="Create_VM‎(JavaVMOption []‎, int‎, char *‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="VM_stack *" />
-    <Node Id="@13" Category="CodeSchema_Method" Bounds="40,136,298.513333333333,26" CodeSchemaProperty_IsPublic="True" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="JNI_CreateJavaVM‎(JavaVM **‎, void **‎, void *‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="_JNI_IMPORT_OR_EXPORT_ jint JNICALL" />
-    <Node Id="@4" Category="CodeSchema_Method" Bounds="0,56,378.513333333333,314" CodeSchemaProperty_IsPublic="True" Group="Expanded" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="Create_JVM_Management‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="Receipt *" />
-    <Node Id="@6" Category="CodeSchema_Method" Bounds="102.331666666667,268,173.85,26" CodeSchemaProperty_IsPublic="True" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="Run_Jni_Onload‎(void *‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="@7" Category="CodeSchema_Method" Bounds="94.3133333333334,324,189.886666666667,26" CodeSchemaProperty_IsPublic="True" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="Run_main_method‎(void *‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="Receipt *" />
-    <Node Id="@8" Category="CodeSchema_Method" Bounds="59.7085360623958,192,259.096261208542,26" CodeSchemaProperty_IsPublic="True" Icon="c9d5fb63-9822-487a-99ec-0889275ae5ba" Label="alloc_VM_func_stack‎(JavaVM *‎, char *‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="VM_stack *" />
-  </Nodes>
-  <Links>
-    <Link Source="(@1 @2 @3 Member=Init_JVM_Resources_Controller)" Target="@4" Bounds="189.25666809082,26,0,21" />
-    <Link Source="@10" Target="@13" Category="Contains" />
-    <Link Source="@10" Target="@6" Bounds="189.25666809082,238,0,21" />
-    <Link Source="@10" Target="@8" Category="Contains" Bounds="160.988666764894,73.6670421875,101.969844440501,50.0351217134604" />
-    <Link Source="@13" Target="@8" Bounds="189.25666809082,162,0,21" />
-    <Link Source="@4" Target="@10" Category="Contains" Bounds="169.256664632893,26,1.26241357634171E-06,45.999844277954" />
-    <Link Source="@4" Target="@6" Category="Contains" />
-    <Link Source="@4" Target="@7" Category="Contains" />
-    <Link Source="@6" Target="@7" Bounds="189.25666809082,294,0,21" />
-  </Links>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes />
+  <Links />
   <Categories>
-    <Category Id="CodeSchema_Member" Label="编号" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="CodeSchema_Field" NavigationActionLabel="成员" />
-    <Category Id="CodeSchema_Method" Label="方法" BasedOn="CodeSchema_Member" CanBeDataDriven="True" DefaultAction="Link:Forward:CodeSchema_Calls" Icon="CodeSchema_Method" NavigationActionLabel="方法" />
-    <Category Id="Contains" Label="包含" Description="链接的源是否包含目标对象" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="包含者" IsContainment="True" OutgoingActionLabel="包含" />
+    <Category Id="项目" />
+    <Category Id="包" />
   </Categories>
-  <Properties>
-    <Property Id="Bounds" DataType="System.Windows.Rect" />
-    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
-    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
-    <Property Id="CodeSchemaProperty_IsPublic" Label="是公共的" Description="一个标志，用于指示该范围是“公共”范围" DataType="System.Boolean" />
-    <Property Id="DefaultAction" Label="DefaultAction" Description="DefaultAction" DataType="System.String" />
-    <Property Id="Expression" DataType="System.String" />
-    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
-    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
-    <Property Id="GroupLabel" DataType="System.String" />
-    <Property Id="Icon" Label="图标" Description="图标" DataType="System.String" />
-    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
-    <Property Id="IsContainment" DataType="System.Boolean" />
-    <Property Id="IsEnabled" DataType="System.Boolean" />
-    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
-    <Property Id="Language" Label="语言" Description="语言" DataType="System.String" />
-    <Property Id="Layout" DataType="System.String" />
-    <Property Id="NativeProvider_CodeItemIds" Label="NodeIds" Description="NodeIds" DataType="System.String" />
-    <Property Id="NativeProvider_ReturnType" Label="Return Type" Description="Return Type" DataType="System.String" />
-    <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
-    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
-    <Property Id="TargetType" DataType="System.Type" />
-    <Property Id="Value" DataType="System.String" />
-    <Property Id="ValueLabel" DataType="System.String" />
-    <Property Id="ZoomLevel" DataType="System.String" />
-  </Properties>
-  <QualifiedNames>
-    <Name Id="Assembly" Label="程序集" ValueType="Uri" />
-    <Name Id="File" Label="文件" ValueType="Uri" />
-    <Name Id="Member" Label="编号" ValueType="System.Object" />
-    <Name Id="Name" Label="名称" ValueType="System.String" />
-    <Name Id="Namespace" Label="命名空间" ValueType="System.String" />
-    <Name Id="OverloadingParameters" Label="参数" ValueType="Microsoft.VisualStudio.GraphModel.GraphNodeIdCollection" Formatter="NameValueNoEscape" />
-    <Name Id="Type" Label="类型" ValueType="System.Object" />
-  </QualifiedNames>
-  <IdentifierAliases>
-    <Alias n="1" Uri="Assembly=$(36b8d44a-ed66-4afd-a07b-e6d9f09bbf1f.OutputPathUri)" />
-    <Alias n="2" Uri="File=$(VsSolutionUri)/JVM_Resources_Controller/JVM_Resources_Controller.c" />
-    <Alias n="3" Id="Namespace=::" />
-    <Alias n="4" Id="(@1 @2 @3 Member=(Name=Create_JVM_Management OverloadingParameters=[(Type=void)]))" />
-    <Alias n="5" Uri="File=$(VsSolutionUri)/JVM_Resources_Controller/Create_VM.c" />
-    <Alias n="6" Id="(@1 @5 @3 Member=(Name=Run_Jni_Onload OverloadingParameters=[(Type=&quot;void *&quot;)]))" />
-    <Alias n="7" Id="(@1 @5 @3 Member=(Name=Run_main_method OverloadingParameters=[(Type=&quot;void *&quot;)]))" />
-    <Alias n="8" Id="(@1 @5 @3 Member=(Name=alloc_VM_func_stack OverloadingParameters=[(Type=&quot;JavaVM *&quot;),(Type=&quot;char *&quot;)]))" />
-    <Alias n="9" Uri="File=$(VsSolutionUri)/JVM_Resources_Controller/JVM_Resources_Controller/control_fun.h" />
-    <Alias n="10" Id="(@1 @9 @3 Member=(Name=Create_VM OverloadingParameters=[(Type=&quot;JavaVMOption []&quot;),(Type=int),(Type=&quot;char *&quot;)]))" />
-    <Alias n="11" Uri="Assembly=$(8822cb5c-1c41-41c2-8493-9f6e1994338b.OutputPathUri)" />
-    <Alias n="12" Uri="File=file:///C:/cygwin64/home/Jane/openjdk9/hotspot/src/share/vm/prims/jni.cpp" />
-    <Alias n="13" Id="(@11 @12 @3 Member=(Name=JNI_CreateJavaVM OverloadingParameters=[(Type=&quot;JavaVM **&quot;),(Type=&quot;void **&quot;),(Type=&quot;void *&quot;)]))" />
-  </IdentifierAliases>
   <Styles>
-    <Style TargetType="Node" GroupLabel="是公共的" ValueLabel="True">
-      <Condition Expression="CodeSchemaProperty_IsPublic = 'True'" />
-    </Style>
     <Style TargetType="Node" GroupLabel="项目" ValueLabel="True">
       <Condition Expression="HasCategory('项目')" />
       <Setter Property="Background" Value="Blue" />
     </Style>
   </Styles>
-  <Paths>
-    <Path Id="36b8d44a-ed66-4afd-a07b-e6d9f09bbf1f.OutputPathUri" Value="file:///D:/SkyDrive/GitHub/Module_Loader/Module_Loader/x64/Debug/JVM_Resources_Controller.lib" />
-    <Path Id="8822cb5c-1c41-41c2-8493-9f6e1994338b.OutputPathUri" Value="file:///C:/cygwin64/home/Jane/openjdk9/hotspot/build/vs-amd64/tiered/debug/jvm.dll" />
-    <Path Id="VsSolutionUri" Value="file:///D:/SkyDrive/GitHub/Module_Loader/Module_Loader" />
-  </Paths>
 </DirectedGraph>

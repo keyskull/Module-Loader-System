@@ -65,8 +65,16 @@ float Get_Author_Version(Module_Owner * Module_Owner){
 	else NULL;
 }
 _Bool Have_Module(char * Module_Name){
-	//δдequals
-	return true;
+	if (_Module_stack != NULL){
+		Module_Stack *stack_head = _Module_stack, *module_stack = stack_head;
+		do{
+			if (!strcoll(module_stack->module_info->Module_Name, Module_Name))
+				module_stack = module_stack->next;
+			else return true;
+		} while (module_stack!=stack_head);
+	}
+	else return false;
+	return false;
 }
 
 _Bool Get_Module(char * Module_Name){
