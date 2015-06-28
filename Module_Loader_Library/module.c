@@ -30,6 +30,17 @@ void *Create_Module_Handle(char* Author_name, char * Module_Name, float Version)
 	const Module_Info mh = { Check_MID(Author_name, Module_Name, Version), now, Author_name, Module_Name, Version };
 	Module_Info *module_handle = malloc(sizeof(Module_Info));
 	memmove(module_handle, &mh, sizeof(Module_Info));
+	Module_Stack *module_stack = malloc(sizeof(Module_Stack));
+	module_stack->module_info = module_handle;
+	if (_Module_stack == NULL){
+		module_stack->next = module_stack;
+		_Module_stack = module_stack;
+	}
+	else{
+		Module_Stack *module_stack_head = _Module_stack;
+		module_stack->next = module_stack_head->next;
+		module_stack_head->next = module_stack;
+	}
 	return module_handle;
 }
 
@@ -77,6 +88,24 @@ _Bool Have_Module(char * Module_Name){
 	return false;
 }
 
+String_Array *Show_Module(void){
+	if (_Module_stack == NULL)return NULL;
+	String_Array * string_array = malloc(sizeof(String_Array));
+	Module_Stack *Module_stack_head = _Module_stack, *Module_stack=Module_stack_head;
+	int len = 1;
+	do{
+		Module_stack = Module_stack->next; 
+		len++;
+	} while (Module_stack != Module_stack_head);
+	string_array->len = len;
+	string_array->String = malloc(sizeof(char *)*len);
+	for (int i = 0; i < string_array->len; i++){
+		string_array->String[i] = malloc(sizeof(char)*(strlen(Module_stack->module_info->Module_Name + 1)));
+		memcpy(string_array->String[i], Module_stack->module_info->Module_Name, sizeof(char)*(strlen(Module_stack->module_info->Module_Name) + 1));
+		Module_stack = Module_stack->next;
+	}
+	return string_array;
+}
 _Bool Get_Module(char * Module_Name){
 	//δдequals
 

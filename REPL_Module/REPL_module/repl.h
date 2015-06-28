@@ -50,6 +50,8 @@ int Add_command(CMD_list_stack *cmd_list,char *cmd_name,Function func);
 CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal);
 Receipt * Init_REPL(void);
 Receipt * Apply_shell(Terminal_data *terminal);
+Receipt * Run_shell(Terminal_data *terminal);
+
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

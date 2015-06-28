@@ -11,7 +11,7 @@
 #include <string.h>
 
 
-
+//分析参数
 Args_struct * const Analysis_args(char *args){
 	Args_struct * const args_struct = malloc(sizeof(Args_struct));
 	if (args == NULL){
@@ -27,8 +27,8 @@ Args_struct * const Analysis_args(char *args){
 	if (_args != NULL)while (_args[i] != NULL)i++;
 	const Args_struct _args_struct = { i ,_args};
 	memmove(args_struct, &_args_struct, sizeof(Args_struct));
-	printf("%d\n", args_struct->length);//test
-	for (int n = 0; n < i; n++)printf("%s\n", args_struct->args[n]);//test
+	//printf("%d\n", args_struct->length);//test
+	//for (int n = 0; n < i; n++)printf("%s\n", args_struct->args[n]);//test
 	return args_struct;
 }
 Command_struct *Analysis_command(char *command){

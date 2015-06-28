@@ -33,29 +33,35 @@ extern "C"
 
 
 
-	/*Receipt*/
-	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
 
-	typedef const struct _Receipt{
-		const time_t create_time;
-		 void *const used_func;
-		 char *const info;
-		 enum SecurityLevel security_level;
-		Module_Owner *const Module_handle;
-	}Receipt;
 
-	/*system function*/
-	
-	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Module_Owner *const Module_info,const char *const additional_info);
-	//Receipt *const Register_Module(Module_Info *const module_info);
-	Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version);
+	/*misc struct and function*/
+	typedef struct _String_Array{
+		int len;
+		char **String;
+	}String_Array;
 
-	/*misc function*/
 
 	char **const Tokenizer(char *args, const char Keyword);//分词器
 	char *Show_Time_CharFormat(time_t time, const char * format);
 	char *Get_date(const char * format);
+	/*end misc struct and function*/
 
+	/*system function*/
+	enum SecurityLevel{ SUCCESS, WARRING, ERROR };
+
+	typedef const struct _Receipt{
+		const time_t create_time;
+		void *const used_func;
+		char *const info;
+		enum SecurityLevel security_level;
+		Module_Owner *const Module_handle;
+	}Receipt;
+	Receipt *const Create_Receipt(const void *const used_func, const enum SecurityLevel security_level, Module_Owner *const Module_info,const char *const additional_info);
+	Module_Owner *Register_Module_Info(char* Author_name, char * Module_Name, float Version);
+	String_Array *Show_Module(void);
+
+	/*end system function*/
 #if defined(__cplusplus)
 }                               /* End of extern "C" */
 #endif                          /* __cplusplus */

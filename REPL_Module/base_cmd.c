@@ -1,6 +1,5 @@
 #include "Module_Loader/base.h"
 #include "REPL_module/repl.h"
-#include "Module_Loader/apply.h"
 #include"Terminal_module/terminal.h"
 #include"User_module/user.h"
 #include<string.h>
@@ -22,8 +21,14 @@ char * base_su(const Args_struct *const args, Repl_data_struct * const repl_data
 
 
 char *base_module(const Args_struct *const args, Repl_data_struct * const repl_data){
-
-	return "load success";
+	String_Array * string_array=Show_Module();
+	if (string_array == NULL)return "NULL";
+	char *cache = calloc(INIT_CACHE_SIZE, sizeof(char));
+	for (int i = 0; i < string_array->len; i++){
+		strcat(cache, string_array->String[i]);
+		strcat(cache, "\n");
+	}
+	return cache;
 }
 
 char *base_time(const Args_struct *const args, Repl_data_struct * const repl_data){
@@ -55,7 +60,7 @@ int Add_command_help_document(){
 int Init_base_command(CMD_list_stack *cmd_list_stack)
 {
 	Add_command(cmd_list_stack, "su", base_su);
-	Add_command(cmd_list_stack, "model", base_module);
+	Add_command(cmd_list_stack, "show_module", base_module);
 	Add_command(cmd_list_stack, "time", base_time);
 	Add_command(cmd_list_stack, "help", base_help);
 	Add_command(cmd_list_stack, "exit", base_exit);

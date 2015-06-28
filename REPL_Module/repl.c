@@ -27,6 +27,18 @@ Receipt * Save_repl(Repl_data_struct * repl_data){
 	return Create_Receipt(Save_repl, SUCCESS, REPL_module_owner, "Init Save Shell success!");
 }
 
+Repl_data_struct * Get_repl_data_struct(Terminal_data * terminal){
+	if (repl_stack != NULL){
+		Repl_Stack *stack_head = repl_stack, *_repl_stack = stack_head;
+		do{
+			if (_repl_stack->repl_data->terminal != terminal)
+				_repl_stack = _repl_stack->next;
+			else return _repl_stack->repl_data;
+		} while (_repl_stack!=stack_head);
+	}
+	return NULL;
+}
+
 CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal){
 	if (repl_stack != NULL){
 		Repl_Stack *stack_head = repl_stack, *_repl_stack = stack_head;
@@ -34,7 +46,7 @@ CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal){
 			if (_repl_stack->repl_data->terminal != terminal)
 				_repl_stack = _repl_stack->next;
 			else return _repl_stack->repl_data->cmd_list_stack;
-		} while (_repl_stack!=stack_head);
+		} while (_repl_stack != stack_head);
 	}
 	return NULL;
 }
@@ -45,6 +57,7 @@ CMD_list_stack * Get_cmd_list_stack(Terminal_data * terminal){
 Receipt * Init_REPL(void){
 	Module_Owner * module_owner = Register_Module_Info("Cullen Lee", "Init_REPL", 0.1f);
 	module_owner = module_owner->Module_Handle;
+	printf("Init Shell Module Success\n");
 	return Create_Receipt(Init_REPL, SUCCESS, REPL_module_owner, "Init REPL success!");
 }
 
@@ -85,13 +98,15 @@ Function Find_command(CMD_list_stack *cmd_list,char * command){
 
 int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *const args){
 	if (command[0]!='\0'){
-		Function cmd = Find_command(repl_data->cmd_list_stack, command);
+		char * _command = malloc(sizeof(char)*(strlen(command) + 1));
+		memmove(_command, command, sizeof(char)*(strlen(command) + 1));
+		if (_command[strlen(_command) - 1] == '\r')_command[strlen(_command) - 1] = '\0';
+		Function cmd = Find_command(repl_data->cmd_list_stack, _command);
 		if (cmd == (Function)Not_Found_function){
-			printf("%s command not found \n", command);
+			printf("%s command not found \n", _command);
 			return EXIT_FAILURE;
 		}
 		else {
-
 			char *c = cmd(args, repl_data);
 			if (c)printf("%s\n", c);
 			int i = strlen(c) + 1;
@@ -99,6 +114,7 @@ int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *c
 			memmove(cache, c, i);
 			free(cache);
 		}
+		free(_command);
 	}
 	return EXIT_SUCCESS;
 }
@@ -106,7 +122,7 @@ int Run_command(Repl_data_struct *repl_data,char * command, const Args_struct *c
 
 int repl(Repl_data_struct *repl_data){
 	/***Init***/
-	if (Init_repl(repl_data) == EXIT_FAILURE)return INIT_REPL_ERROR;
+	//Init_REPL();
 	/***end Init***/
 	while (repl_data->state){
 		printf("%s >", repl_data->terminal->user_data->user_name);
@@ -135,7 +151,14 @@ Receipt * Apply_shell(Terminal_data *terminal){
 	repl_data->terminal = terminal;
 	repl_data->cmd_list_stack = cmd_list_stack;
 	Save_repl(repl_data);
+	return Create_Receipt(Apply_shell, SUCCESS, REPL_module_owner, "Apply succes");
+}
+
+Receipt * Run_shell(Terminal_data *terminal){
+	Repl_data_struct * repl_data = Get_repl_data_struct(terminal);
+	repl_data->state = 1;
 	int i = repl(repl_data);
 	if (i == INIT_REPL_ERROR || i == EXIT_FAILURE)return Create_Receipt(Apply_shell, ERROR, REPL_module_owner, "run failed");
-	else return Create_Receipt(Apply_shell, SUCCESS, REPL_module_owner, "run succes");
+	else return Create_Receipt(Run_shell, SUCCESS, REPL_module_owner, "run succes");
+
 }
